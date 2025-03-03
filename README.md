@@ -1,4 +1,4 @@
-<details>
+![image](https://github.com/user-attachments/assets/3fae6488-5952-4f73-a267-de801f8250c5)<details>
 <summary><h1>This repository, i just want to show what Digital Forensics work. If care about it so span it down ᓚᘏᗢ </h1></summary>
    
 # Digital_Forensics
@@ -510,5 +510,36 @@ Handles are pointers to system objects such as files, registry keys, processes, 
 
 
 ![image](https://github.com/user-attachments/assets/7bc44feb-1904-461b-b162-679f0044ae24)
+
+
+# Task 10: Identify and Investigate FTP Brute Force Attacks using Splunk
+
+*   Successfully installed Splunk.
+
+![image](https://github.com/user-attachments/assets/33f6a42c-6d45-4319-b9d8-d5bbe018a427)
+
+
+*   Checked the logs.
+
+![image](https://github.com/user-attachments/assets/df52e6c8-579f-452e-84cb-39441c840b58)
+
+
+# Task 11: Investigate Network Attacks using Kiwi Log Viewer
+
+*   The log IDs show that the attacker successfully logged in.
+*   Since we know a successful login has a response code of 230 (User logged in - Response: 230), we will search for that.
+*   We will search for responses with code 230.
+
+![image](https://github.com/user-attachments/assets/d3e10753-125d-4c38-b28a-739382c29dcf)
+
+
+*   Result: The log ID for the successful brute-force is 8622.
+
+
+![image](https://github.com/user-attachments/assets/95dae9df-ca2a-4abb-ba7e-54868049090c)
+
+
+
+# Thank 
 
 </details>
