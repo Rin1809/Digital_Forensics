@@ -1,6 +1,6 @@
 <details>
 
-<summary><h1>This repository, i just want to show what Digital Forensics work (doing realistic simulation lab ). If care about it so pan it down ᓚᘏᗢ </h1></summary>
+<summary><h1>This repository, i just want to show what Digital Forensics work (doing realistic simulation lab ). If care about it so expan it down ᓚᘏᗢ </h1></summary>
 
 # Digital_Forensics
 
