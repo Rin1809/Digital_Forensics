@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/3fae6488-5952-4f73-a267-de801f8250c5)<details>
+<details>
+   
 <summary><h1>This repository, i just want to show what Digital Forensics work. If care about it so span it down ᓚᘏᗢ </h1></summary>
    
 # Digital_Forensics
