@@ -1,5 +1,8 @@
-![image](https://github.com/user-attachments/assets/da81535d-c9e2-4d72-a2eb-6c07bf2e6f52)# Digital_Forensics
+<details>
+<summary>This repository, i just want to show what Digital Forensics work. If care about it so span it down ᓚᘏᗢ </summary>
+# Digital_Forensics
 
+![image](https://github.com/user-attachments/assets/da81535d-c9e2-4d72-a2eb-6c07bf2e6f52)
 
 
 # Task 1: Create a DD-format Image File
@@ -465,4 +468,4 @@ Handles are pointers to system objects such as files, registry keys, processes, 
         This command searches for strings containing `powershell.exe`.
 ![image](https://github.com/user-attachments/assets/7bc44feb-1904-461b-b162-679f0044ae24)
 
-
+</details>
