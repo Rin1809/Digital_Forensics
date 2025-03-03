@@ -8,115 +8,161 @@
 
 This repository documents a series of digital forensics exercises performed in a simulated lab environment.  Each task demonstrates a key aspect of a digital forensics investigation, from image acquisition to memory analysis.  The goal is to provide a practical, hands-on understanding of the tools and techniques used in real-world digital forensics investigations.
 
-# Task 0: Initial File Analysis and Question Answering 
+# Task 0: Initial File Analysis and Question Answering - Unveiling Hidden Clues
 
-**Objective:** This task serves as an introductory exercise to familiarize you with basic digital forensics techniques. You will be analyzing a provided file, likely containing encoded or hidden information related to a simulated investigation. The goal is to decode this information, answer specific questions based on the extracted data, and understand how seemingly simple tasks can reveal crucial clues in a digital forensics scenario.  This task emphasizes the importance of observation, decoding, and targeted analysis.
+**Objective:** This task serves as an introductory exercise to familiarize you with basic digital forensics techniques. You will be analyzing a provided file, likely containing encoded or hidden information related to a simulated investigation. The goal is to decode this information, answer specific questions based on the extracted data, and understand how seemingly simple tasks can reveal crucial clues in a digital forensics scenario.  This task emphasizes the importance of observation, decoding, and targeted analysis as foundational skills for digital investigations.
 
 ![image](https://github.com/user-attachments/assets/5fa1670e-5425-420a-b8da-8f55f65804cb)
 
 Opening the initial file reveals a section of data recorded in hexadecimal format. **Why is data sometimes in hex?** Hexadecimal (base-16) is a common way to represent binary data in a human-readable format. Computers work with binary (0s and 1s), but hex is more compact and easier for humans to read and write than long strings of binary digits.  In forensics, hex representation is often used for:
 
-*   **Examining raw data:** Viewing the exact bytes of a file or disk image.
-*   **Identifying file signatures:**  Recognizing file types by their header bytes (often viewed in hex).
-*   **Analyzing network packets:**  Looking at the byte-level structure of network communication.
-*   **Debugging and reverse engineering:**  Understanding the low-level workings of software.
+*   **Examining raw data:** Viewing the exact bytes of a file or disk image, allowing for a granular level of inspection.
+*   **Identifying file signatures (Magic Numbers):**  Recognizing file types by their header bytes (often viewed in hex), which is critical for file identification and validation.
+*   **Analyzing network packets:**  Looking at the byte-level structure of network communication, essential for protocol analysis and anomaly detection.
+*   **Debugging and reverse engineering:**  Understanding the low-level workings of software, necessary for malware analysis and vulnerability research.
 
-**Step 1: Decoding Hexadecimal Data to ASCII**
+**Step 1: Decoding Hexadecimal Data to ASCII - Making Data Readable**
 
-To understand the hex data, we need to convert it to a more readable format, typically ASCII text. ASCII (American Standard Code for Information Interchange) is a character encoding standard that represents text in computers.
+To understand the hex data, we need to convert it to a more readable format, typically ASCII text. ASCII (American Standard Code for Information Interchange) is a character encoding standard that represents text in computers.  Converting to ASCII allows us to read and interpret the intended message or information hidden within the hex code.
 
 **How to Convert Hex to ASCII:**
 
-*   **Online Hex to ASCII Converters:** Numerous online tools are available (just search for "hex to ascii converter"). You can copy and paste the hex data into these tools to get the ASCII output.
-*   **Command-line Tools (Linux/macOS):**  You can use tools like `xxd -r -p` or `echo "hex_data" | xxd -r -p | strings` in a terminal.
-*   **Hex Editors:**  Hex editors often have built-in functionality to interpret hex data as ASCII or other character encodings.
+*   **Online Hex to ASCII Converters:** Numerous online tools are available (just search for "hex to ascii converter"). You can copy and paste the hex data into these tools to get the ASCII output quickly and easily.
+*   **Command-line Tools (Linux/macOS):**  You can use tools like `xxd -r -p` or `echo "hex_data" | xxd -r -p | strings` in a terminal. These are efficient for batch conversions and scripting.
+*   **Hex Editors:**  Hex editors often have built-in functionality to interpret hex data as ASCII or other character encodings, providing a visual representation within the editor itself.
 
-After converting the hex format, the data can be decoded into ASCII for reading. This reveals human-readable text, which is much easier to analyze.
+After converting the hex format, the data can be decoded into ASCII for reading. This reveals human-readable text, which is much easier to analyze and from which we can extract the answers to our investigative questions.
 
 ![image](https://github.com/user-attachments/assets/8c8f64f9-cc5e-4256-82ec-51012e891b51)
 
 Now we can proceed to answer the specific questions based on this decoded ASCII text.
 
-*   **Question 1:** What is the website of the chat software that Nhung used?
+---
 
-     ![image](https://github.com/user-attachments/assets/a11d8035-010c-4b69-836b-ad79d44ffc9e)
+**Question 1:  Identify the Chat Software Website**
 
-    *   **Step:** Examine the decoded ASCII text. Look for patterns that resemble website addresses (e.g., starting with "www." or containing ".com", ".co", etc.). In the decoded text, you can clearly see "Website chat cua Nhung la: www.e-chat.co".
+**Question:** What is the website address of the chat software that the user "Nhung" used?
+    ![image](https://github.com/user-attachments/assets/a11d8035-010c-4b69-836b-ad79d44ffc9e)
+
+   *   **Step 1: Examine the Decoded ASCII Text for Web Addresses.** Carefully read through the decoded ASCII text.  Look for strings that resemble web addresses or URLs.  Common patterns to look for include "www.", "http://", "https://", and top-level domains like ".com", ".org", ".net", ".co", etc.
+        *   **Why this step?** Websites are often key communication channels. Identifying a chat software website provides context to the user's online activities and potential communication avenues.
+    *   **Step 2: Locate the Website Address.** In the decoded text, identify the line "Website chat cua Nhung la: www.e-chat.co". This clearly indicates the website address.
+        *   **Why this step?** Pinpointing the exact website address allows for direct access and further investigation of the chat platform itself, if needed.
     *   **Answer:** `www.e-chat.co`
-    *   **Why is this question relevant?**  Identifying the chat software used can be important for several reasons:
-        *   **Context:** It provides context about Nhung's online activities and communication methods.
-        *   **Further Investigation:** Knowing the chat software might lead to further investigation of chat logs, account information, or vulnerabilities associated with that specific platform.
-        *   **Link Analysis:**  It could be a starting point for link analysis if the chat software is known to be used for illicit activities.
+    *   **Relevance to Digital Forensics:**  Identifying the chat software used can be important for several reasons:
+        *   **Contextual Understanding:** It provides context about Nhung's online activities and preferred communication platforms.
+        *   **Further Investigation Potential:** Knowing the specific chat software might enable investigators to explore potential chat logs, account information, or known vulnerabilities associated with that platform.
+        *   **Link Analysis Starting Point:**  It can serve as a starting point for link analysis, especially if the chat software is known to be associated with illicit activities or threat actors.
 
-*   **Question 2:** The location where Nhung hid the USB drive, answer in Vietnamese without accents as in the investigation result:
+---
+
+**Question 2: Determine the USB Drive Hiding Location**
+
+**Question:** Based on the decoded text, describe the location where Nhung hid the USB drive.  Answer in Vietnamese without accents, as it might appear in an investigation report.
 
 *   ![image](https://github.com/user-attachments/assets/8e7548ef-c3ec-4426-8d23-0ad2ff520f19)
 
-    *   **Step:**  Continue examining the decoded ASCII text. Look for phrases that indicate a location or hiding place.  The text reads: "Noi Nhung giau USB la: chau cay".
-    *   **Answer:** `chau cay` (chậu cây - flower pot)
-    *   **Why is this question relevant?**  Knowing the hiding location of physical evidence (like a USB drive) is crucial for:
-        *   **Physical Evidence Recovery:**  Directly leading investigators to the location where the USB drive might be physically hidden.
-        *   **Corroboration:**  Confirming details from other sources (e.g., witness statements) with physical evidence.
-        *   **Understanding Intent:** The hiding place itself might provide clues about the person's intent to conceal information.
+    *   **Step 1: Search for Location Keywords in Decoded Text.**  Carefully read the decoded ASCII text, specifically looking for keywords or phrases that suggest a physical location or hiding place.  Keywords to consider might include "place", "location", "hidden", "giấu" (Vietnamese for "hide"), "nơi" (Vietnamese for "place"), and prepositions indicating location (e.g., "in", "under", "behind", "trong" - Vietnamese for "in").
+        *   **Why this step?** In many investigations, physical evidence is crucial. Identifying a potential hiding location from digital clues can directly lead to the recovery of physical evidence.
+    *   **Step 2: Locate the Hiding Place Description.**  In the decoded text, identify the line "Noi Nhung giau USB la: chau cay". This translates to "The place Nhung hid the USB is: flower pot".
+        *   **Why this step?**  This directly provides the hiding location described in the text, which is the target of this question.
+    *   **Answer:** `chau cay` (meaning "flower pot" in Vietnamese)
+    *   **Relevance to Digital Forensics:** Knowing the hiding location of physical evidence (like a USB drive) is crucial for:
+        *   **Physical Evidence Recovery:**  Providing investigators with a direct lead to the potential physical location of the USB drive, enabling its physical recovery.
+        *   **Evidence Corroboration:**  Potentially confirming details obtained from other sources (e.g., witness statements, digital logs) with tangible physical evidence.
+        *   **Understanding Intent:**  The nature of the hiding place itself might provide further clues about the individual's intent to conceal information or activity.
 
-*   **Question 3:** What method did the attacker use to exploit the system? We can see continuous and unusual failed login attempts by examining the `auth.log` file, starting from April. We can also check for unusual failed logins --> Burt-Force
+---
+
+**Question 3: Identify the System Attack Method**
+
+**Question:** Based on the provided information and log analysis context, what method did the attacker likely use to attempt to compromise the system?
 
   ![image](https://github.com/user-attachments/assets/9b227fe3-e5d0-47a6-ba85-216a2f8b1d7a)
   ![image](https://github.com/user-attachments/assets/c8aebcf7-a761-4bfe-b2a9-7b0a84a3609f)
-    *   **Step:** The question itself provides the answer by referencing "continuous and unusual failed login attempts" and "Burt-Force".  "Burt-Force" is likely a typo and meant to be "Brute-Force".  Brute-force attacks are characterized by numerous attempts to guess passwords or usernames.  The images show log entries from `auth.log` which is a common log file on Linux systems that records authentication attempts.  The repeated "Failed password for invalid user" entries strongly suggest a brute-force attack.
+
+   *   **Step 1: Analyze Log Snippets for Authentication Failures.** Examine the provided images of log entries, particularly noting any recurring patterns or keywords related to authentication. Look for messages indicating failed login attempts, invalid usernames, or password failures. The images show log entries from `auth.log` with messages like "Failed password for invalid user" and repeated failed authentication attempts.
+        *   **Why this step?** Authentication logs are primary sources of information regarding login attempts, both successful and failed. Analyzing failure patterns is key to identifying potential attacks targeting user accounts.
+    *   **Step 2: Recognize Brute-Force Attack Indicators.** Identify the characteristics of a brute-force attack within the log snippets.  Key indicators include:
+        *   **High Volume of Failed Logins:** Numerous failed login attempts in a short period.
+        *   **Invalid Usernames (Sometimes):** Attempts to log in with usernames that don't exist on the system (as seen in "invalid user").
+        *   **Repetitive Nature:**  The attempts often originate from the same or a limited set of source IP addresses.
+        *   **System Resource Consumption:** Brute-force attacks can consume system resources due to repeated authentication processes.
+        *   **Contextual Clues (from Question):** The question itself hints at "continuous and unusual failed login attempts" and "Burt-Force" (likely a typo for "Brute-Force").
+        *   **Why this step?** Recognizing brute-force indicators helps classify the type of attack and understand the attacker's initial access strategy.
+    *   **Step 3: Conclude the Attack Method.** Based on the repeated failed login attempts, especially "Failed password for invalid user," and the question's hint, conclude that the attacker likely employed a brute-force attack.
+        *   **Why this step?**  Correctly identifying the attack method is essential for effective incident response and implementing appropriate security countermeasures.
     *   **Answer:** `Brute-Force`
-    *   **Why is this question relevant?**  Identifying the attack method is fundamental in incident response and forensics:
-        *   **Understanding Attack Vectors:** Knowing the method helps understand how the attacker gained (or attempted to gain) access.
-        *   **Assessing Damage:**  The type of attack can indicate the potential scope of compromise. A brute-force attack, if successful, can lead to unauthorized access and further malicious activities.
-        *   **Remediation:** Knowing the attack method is essential for implementing appropriate security measures to prevent future attacks of the same type (e.g., strengthening passwords, implementing account lockout policies, using multi-factor authentication).
+    *   **Relevance to Digital Forensics:** Identifying the attack method is fundamental in incident response and forensics because it allows for:
+        *   **Understanding Attack Vectors:** Knowing the attack method helps understand *how* the attacker attempted to gain access to the system.
+        *   **Assessing Potential Damage:** The attack method informs the potential scope of compromise. A successful brute-force attack can lead to unauthorized access, account compromise, and further malicious activities.
+        *   **Implementing Remediation and Prevention:**  Knowing the attack method is crucial for implementing appropriate security measures to prevent future attacks of the same type (e.g., strengthening passwords, implementing account lockout policies, enabling multi-factor authentication, deploying intrusion detection systems).
 
-*   **Question 4:** How many IPs performed the attack? How many of them successfully attacked?
+---
 
-    Based on classifying these IP addresses, they appear to be targets of brute force, based on the high number of login attempts associated with them (limited to the April attack period).
+**Question 4: Determine the Number of Attacking IPs and Successful Compromises**
 
-    *(The list of IPs and attempt counts is provided in the original document - no image is needed here)*
+**Question:** How many unique IP addresses were involved in the brute-force attack attempts? Of these, how many IP addresses were associated with *successful* logins?
 
-    *   **Step 1: Count the Number of Attacking IPs:**  Count the number of unique IP addresses listed in the provided data that are associated with failed login attempts.  The list provides 24 unique IP addresses.
-    *   **Step 2: Identify IPs with Successful Logins:** Examine the subsequent data that shows IPs with "successful logins (Accept)". Identify the IPs from the brute-force list that also appear in the successful login list. In this case, 6 IPs are listed with successful logins.
+   Based on classifying these IP addresses, they appear to be targets of brute force, based on the high number of login attempts associated with them (limited to the April attack period).
+
+*(The list of IPs and attempt counts is provided in the original document - no image is needed here)*
+    *   **Step 1: Count Unique Attacking IPs.** Examine the provided list of IP addresses associated with failed login attempts during the brute-force attack period (April). Count the number of *unique* IP addresses in this list. The provided text indicates "24 unique IP addresses" were involved in failed attempts.
+        *   **Why this step?** Counting unique attacking IPs helps quantify the scale of the brute-force attack and identify the potential number of attacker origins.
+    *   **Step 2: Identify IPs with Successful Logins.** Review the subsequent data provided, which lists IP addresses associated with "successful logins (Accept)".  Compare this list to the list of attacking IPs from Step 1. Identify which IPs from the brute-force attempt list also appear in the list of successful logins. The provided text states "6 IPs are listed with successful logins".
+        *   **Why this step?** Identifying IPs with successful logins is critical because these represent actual account compromises. These IPs should be prioritized for further investigation and potential blocking.
     *   **Answer (Number of Attacking IPs):** `24`
     *   **Answer (Number of IPs with Successful Attacks):** `6`
-    *   **Why is this question relevant?**  Identifying attacking IPs and successful IPs helps to:
-        *   **Scope of Attack:**  Understand the scale of the brute-force attempt and how many entry points might have been compromised.
-        *   **Attribution (Initial Clues):** IP addresses can provide initial clues for tracing back the attacker or the origin of the attack, although IP addresses can be spoofed or originate from compromised systems.
-        *   **Blocking and Mitigation:**  IP addresses of attackers can be used to block further malicious activity (e.g., using firewalls or intrusion prevention systems).
-        *   **Prioritization:**  IPs with successful logins are of higher priority for further investigation as they represent actual compromises.
+    *   **Relevance to Digital Forensics:**  Identifying attacking and successful IPs is important for:
+        *   **Assessing Scope of Attack:**  Understanding the scale of the brute-force attempt and how many potential entry points were compromised.
+        *   **Attribution (Initial Tracing):** IP addresses provide initial clues for tracing the attacker's origin, although IP addresses can be spoofed or originate from compromised systems.
+        *   **Blocking and Mitigation:** IP addresses of attackers can be used to implement immediate blocking measures (e.g., firewall rules, intrusion prevention systems) to prevent further malicious activity from those sources.
+        *   **Prioritization for Investigation:** IPs associated with successful logins are of higher priority for further investigation as they represent confirmed compromises and potential points of entry for subsequent malicious actions.
 
-    ![image](https://github.com/user-attachments/assets/d7554195-57f0-414f-bbe9-ed8e5fe6a360)
+---
 
+**Question 5: Determine Newly Created User Accounts During the Attack**
 
-    Based on this, we can also see which IPs successfully logged in. If we compare with the IPs that had failed attempts above, we get:
+**Question:** Which user accounts were newly created on the system *during* the timeframe of the identified brute-force attack?
 
-    *(The list of IPs with successful logins is provided in the original document - no image is needed here)*
-
-    *   --> Depending on how many attempts are considered brute force, we can infer that there were 24 attacking IPs and 6 IPs with successful attacks.
-
-*   **Question 5:** Which users were newly created during the attack process?
 *   ![image](https://github.com/user-attachments/assets/6c84b070-126f-490e-9f91-0fbd144269f5)
 
-    *   **Step:** Examine the provided image which likely shows log entries related to user creation (`useradd` command is visible).  Identify usernames that were created around the time of the brute-force attack (as indicated in the question). The text identifies `packet`, `wind3str0y`, `fido`, `dhg` as users created during the attack, and differentiates them from `user1`, `user2`, `user4` which seem to be pre-existing legitimate users.
+    *   **Step 1: Examine Logs for User Creation Events.** Analyze system logs (like `auth.log`, `audit.log`, or `syslog`) for events indicating user account creation. Look for log entries containing commands such as `useradd`, `adduser`, or similar user management commands. The provided image shows `auth.log` entries containing `useradd` commands.
+        *   **Why this step?** User creation events are logged for auditing and security purposes. Examining these logs helps track account management actions on the system.
+    *   **Step 2: Identify Usernames Created During the Attack Period.**  Filter the user creation logs to isolate user accounts created *specifically* around the time of the brute-force attack (April, as indicated in the context). In the provided image and text, the users `packet`, `wind3str0y`, `fido`, and `dhg` are identified as being created during the attack timeframe. Distinguish these from pre-existing users like `user1`, `user2`, and `user4`.
+        *   **Why this step?** New user accounts created *after* a compromise are highly suspicious. Attackers often create backdoors or accounts for persistence.
     *   **Answer:** `packet`, `wind3str0y`, `fido`, `dhg`
-    *   **Why is this question relevant?**  Identifying newly created users during an attack timeframe is a strong indicator of malicious activity:
-        *   **Backdoors and Persistence:** Attackers often create new user accounts to establish backdoors for persistent access to the compromised system.
-        *   **Privilege Escalation:**  New accounts could be created for privilege escalation attempts or to perform actions under a different user context.
-        *   **Account Compromise Confirmation:**  User creation often follows a successful brute-force attack, indicating that the attacker gained initial access and then proceeded to further compromise the system.
+    *   **Relevance to Digital Forensics:**  Identifying newly created user accounts during an attack is a strong indicator of malicious post-exploitation activity because:
+        *   **Backdoor Establishment:** Attackers frequently create new user accounts as backdoors to maintain persistent access to the compromised system, even if the initial vulnerability is patched.
+        *   **Persistence Mechanism:** Newly created accounts can be used to regain access if the attacker loses their initial foothold or if their initial access method is detected and blocked.
+        *   **Privilege Escalation Preparation:**  Attackers might create new accounts to facilitate privilege escalation attempts or to perform actions under a different user context, potentially bypassing access controls.
+        *   **Confirmation of Account Compromise:** User creation often follows a successful initial compromise (like a brute-force attack), confirming that the attacker gained access and then proceeded to further compromise the system by creating new accounts.
 
-*   **Question 6:** What system scanning tool did the attacker install on this Linux Server?
+---
 
-      ![image](https://github.com/user-attachments/assets/c22e76ce-fdaa-4110-a6fd-1e617e524296)
+**Question 6: Identify the System Scanning Tool Installed by the Attacker**
 
-    *   **Step:** Examine the `term.log` image (likely representing terminal or command history logs). Look for commands related to software installation or system utilities. The image clearly shows the command `apt-get install nmap`. `apt-get` is a package manager on Debian-based Linux systems, and `nmap` is a well-known network scanning tool.
+**Question:** What system scanning tool did the attacker install on this compromised Linux Server?
+
+![image](https://github.com/user-attachments/assets/c22e76ce-fdaa-4110-a6fd-1e617e524296)
+
+   *   **Step 1: Examine Terminal or Command History Logs.** Analyze terminal logs or command history files (like `.bash_history`, command logs, or terminal logs) for commands related to software installation or system utilities. The image shows a `term.log` file, presumably containing terminal command history.
+        *   **Why this step?** Terminal history logs record commands executed by users, providing a direct record of actions taken on the command line, including software installations.
+    *   **Step 2: Look for Package Installation Commands.**  Within the terminal logs, search for commands associated with package managers used for software installation on Linux systems. Common package manager commands include `apt-get install` (Debian/Ubuntu), `yum install` (CentOS/RHEL), `pacman -S` (Arch Linux), etc.  The image clearly shows the command `apt-get install nmap`.
+        *   **Why this step?** Package manager commands directly indicate software installation attempts. Identifying these commands reveals what software the attacker tried to install.
+    *   **Step 3: Identify the Installed Tool.** From the identified package installation command (`apt-get install nmap`), determine the name of the tool being installed. In this case, it is `nmap`. Recognize that `nmap` is a well-known and widely used network scanning tool.
+        *   **Why this step?** Knowing the specific tool installed provides insights into the attacker's post-exploitation activities and objectives.
     *   **Answer:** `Nmap`
-    *   **Why is this question relevant?**  Identifying installed tools, especially security or network scanning tools, can reveal the attacker's post-exploitation activities:
-        *   **Reconnaissance:**  `Nmap` is used for network reconnaissance - scanning for open ports and services on the target system or network. This could indicate the attacker was mapping the network to find further targets or vulnerabilities.
-        *   **Lateral Movement:**  Scanning tools can be used to identify other vulnerable systems on the internal network for lateral movement (spreading the compromise).
-        *   **Information Gathering:**  Attackers use scanning to gather information about the target system's configuration and security posture.
+    *   **Relevance to Digital Forensics:**  Identifying installed tools, especially security or network scanning tools, can reveal the attacker's post-exploitation reconnaissance and lateral movement activities because:
+        *   **Network Reconnaissance:** `Nmap` is primarily used for network reconnaissance. Its installation indicates the attacker was likely scanning the compromised system's network or internal network to map network topology, identify open ports, and discover running services. This information is used for further attack planning.
+        *   **Lateral Movement Preparation:**  Network scanning is often a precursor to lateral movement. Attackers use scan results to identify other vulnerable systems on the internal network that they can then target to expand their compromise.
+        *   **Information Gathering:**  Scanning tools help attackers gather detailed information about the target system's configuration, security posture, and potential vulnerabilities. This information aids in planning further attacks and exploitation.
 
-*   **Question 7:** The attacker used the social network Twitter to send images from the compromised computer. Identify the account and password that the attacker used to log in to Twitter.
+---
+
+**Question 7: Recover Twitter Account Credentials Used for Data Exfiltration**
+
+**Question:** The attacker used the social network Twitter to send images from the compromised computer. Identify the account username and password that the attacker used to log in to Twitter.
 
 *   ![image](https://github.com/user-attachments/assets/64ae2c74-a2bf-4b4c-b540-9a1c78f90155)
 
@@ -126,47 +172,70 @@ Now we can proceed to answer the specific questions based on this decoded ASCII 
     ![image](https://github.com/user-attachments/assets/8ba08790-3edf-4089-afd5-80ed9fe0e2a4)
     ![image](https://github.com/user-attachments/assets/17779deb-8a9f-4dcd-b96f-d1a1b26071c7)
 
-    *   **Step 1: Identify Relevant File:** The question states "file number 3" and mentions "twitter.com". This suggests examining a network capture file (like a `.pcap` or similar) and looking for traffic related to Twitter. The image shows a Wireshark capture ("file number 3") with "twitter.com" as the host.
-    *   **Step 2: Examine Authorization Header:** The text mentions "Authorization hash, in base64 format". In HTTP requests, authorization information is often passed in the "Authorization" header.  The image shows an "Authorization" header in the HTTP request to `twitter.com`.
-    *   **Step 3: Decode Base64:**  The Authorization value is in Base64 encoding. Base64 is a common encoding scheme to represent binary data as ASCII text.  You can use online Base64 decoders or command-line tools like `base64 -d` (Linux/macOS) or PowerShell's `[System.Convert]::FromBase64String()` to decode the hash.  The images show the Base64 encoded hash and the decoded output, revealing "userforlab:passforlab".
+    *   **Step 1: Identify Network Capture File and Twitter Traffic.** The question refers to "file number 3" and "twitter.com", suggesting analysis of a network capture file (like a `.pcap` file) for Twitter-related network traffic. Open the network capture file (file number 3, presumably) in a network protocol analyzer like Wireshark and filter for traffic to or from `twitter.com`.
+        *   **Why this step?** Network captures record network communication, potentially including credentials transmitted over the network. Filtering for Twitter traffic focuses the analysis on relevant communication related to the question.
+    *   **Step 2: Examine HTTP Requests for Authorization Headers.** Look for HTTP requests within the Twitter traffic. Examine the headers of these HTTP requests for "Authorization" headers.  Authorization headers are commonly used in web authentication to transmit credentials or tokens.
+        *   **Why this step?** Authentication credentials for web services are often transmitted in Authorization headers. Identifying these headers within Twitter traffic is a key step towards recovering potential login credentials.
+    *   **Step 3: Identify Base64 Encoded Authorization Value.** The text mentions "Authorization hash, in base64 format".  Locate the value of the "Authorization" header in the Wireshark capture. Recognize that Base64 is a common encoding scheme.
+        *   **Why this step?** Base64 encoding is frequently used to encode binary data or credentials for transmission over text-based protocols like HTTP. Recognizing Base64 encoding is crucial for decoding the potentially hidden credentials.
+    *   **Step 4: Decode Base64 Value to Recover Credentials.** Decode the Base64-encoded value from the Authorization header to reveal the original data. Use a Base64 decoder (online tools, command-line tools like `base64 -d`, or programming languages). The decoded output, as shown in the images, reveals "userforlab:passforlab", which is likely the username and password separated by a colon.
+        *   **Why this step?** Base64 decoding reverses the encoding process, revealing the original data, which in this case, are the likely Twitter login credentials.
     *   **Answer (Account):** `userforlab`
     *   **Answer (Password):** `passforlab`
-    *   **Why is this question relevant?**  Identifying compromised social media accounts used by attackers is important for:
-        *   **Data Exfiltration:**  Social media can be used as a channel for exfiltrating stolen data from a compromised system.
-        *   **Command and Control (C2):** In some cases, attackers might use social media for covert command and control communication with malware.
-        *   **Attribution and Tracking:** Social media accounts can provide further clues for tracing the attacker's identity or activities.
-        *   **Account Remediation:**  Compromised accounts need to be secured (passwords changed, accounts potentially suspended) to prevent further misuse.
+    *   **Relevance to Digital Forensics:**  Identifying compromised social media accounts used by attackers is important because:
+        *   **Data Exfiltration Channel:** Social media platforms can be exploited as channels for exfiltrating stolen data from a compromised system. Attackers might use social media to send data out of the network, bypassing traditional data loss prevention measures.
+        *   **Command and Control (C2) Potential:** In some sophisticated attacks, social media accounts can be used for covert command and control communication with malware.
+        *   **Attribution and Tracking Clues:** Social media accounts can provide further clues for tracing the attacker's identity, online presence, or activities outside the immediate compromised system.
+        *   **Account Remediation Necessity:**  Compromised social media accounts must be immediately secured (passwords changed, accounts potentially suspended or monitored) to prevent further misuse by the attacker, such as spreading misinformation, conducting phishing attacks, or further data exfiltration.
 
-*   **Question 8:** The attacker connected to the internal network and stole the FTP account of a user in the company. Find the attacker's IP address.
+---
 
-    After using Wireshark:
+**Question 8: Determine Attacker's Internal Network IP Address during FTP Account Theft**
 
-      ![image](https://github.com/user-attachments/assets/0498cfd5-f6dd-46e1-bb8b-86ca881a0be9)
+**Question:** The attacker connected to the internal network and stole the FTP account credentials of a user within the company. Analyze the network capture file (presumably using Wireshark) to identify the attacker's IP address *within the internal network*.
 
-    *   **Step:** The question mentions "Wireshark" and "FTP account".  This indicates analyzing a network capture (likely a `.pcap` file) using Wireshark to examine FTP traffic. The image shows a Wireshark capture filtered for FTP protocol.  The text points to the source IP address of the FTP requests ("USER, PASS, SYST, PORT, LIST, RETR, QUIT") as `192.168.0.117`.
+   After using Wireshark:
+
+ ![image](https://github.com/user-attachments/assets/0498cfd5-f6dd-46e1-bb8b-86ca881a0be9)
+      
+ *   **Step 1: Analyze Network Capture for FTP Traffic.** Open the relevant network capture file (likely a `.pcap` file) in Wireshark and filter the capture to focus on FTP (File Transfer Protocol) traffic. Apply a filter like `ftp` or `port 21` in Wireshark to isolate FTP communication.
+        *   **Why this step?** The question explicitly states that the attacker stole FTP credentials, so focusing on FTP traffic is the most direct approach to finding the attacker's network activity related to FTP.
+    *   **Step 2: Examine FTP Command Sequence for Client IP.** Analyze the sequence of FTP commands within the capture. Look for typical FTP client commands like `USER`, `PASS`, `SYST`, `PORT`, `LIST`, `RETR`, `QUIT`, etc., which indicate an FTP client initiating a connection and interacting with an FTP server. Identify the source IP address of these FTP client commands.  The image highlights FTP commands and points to `192.168.0.117` as the source IP.
+        *   **Why this step?** FTP commands are initiated by the FTP client (in this case, the attacker's machine). The source IP address of these commands will reveal the IP address of the machine acting as the FTP client, which is likely the attacker's system within the internal network.
     *   **Answer:** `192.168.0.117`
-    *   **Why is this question relevant?**  Identifying the attacker's IP address within the internal network is crucial for:
-        *   **Internal Network Mapping:**  Understanding the attacker's location and movement within the internal network.
-        *   **Identifying Compromised Internal Systems:**  The attacker's IP address might be associated with a compromised internal system that was used as a staging point for further attacks.
-        *   **Network Segmentation and Security:**  This information can inform network segmentation strategies and security controls to limit lateral movement and contain future breaches.
+    *   **Relevance to Digital Forensics:**  Identifying the attacker's IP address within the internal network is crucial for:
+        *   **Internal Network Mapping:**  Understanding the attacker's location and movement *within* the internal network.  This helps map the attacker's path and identify potentially compromised internal systems.
+        *   **Identifying Compromised Internal Systems:** The attacker's IP address might be associated with a compromised internal workstation or server that was used as a staging point for further attacks, including the FTP account theft.
+        *   **Network Segmentation and Security Enhancement:** This information can inform network segmentation strategies and security controls to limit lateral movement of attackers and contain future breaches more effectively. It highlights internal network vulnerabilities that allowed the attacker to operate within the network.
 
-*   **Question 9:** What are the stolen FTP account and password?
+---
 
+**Question 9: Recover Stolen FTP Account Credentials**
 
+**Question:** What are the specific username and password of the FTP account that the attacker successfully stole?
     After using Wireshark:
 
-    ![image](https://github.com/user-attachments/assets/49253270-a360-473b-a8f2-d66b1d394b5f)
+ ![image](https://github.com/user-attachments/assets/49253270-a360-473b-a8f2-d66b1d394b5f)
 
-    *   **Step:** Continue analyzing the Wireshark FTP capture. Look for FTP commands that transmit credentials, specifically `USER` and `PASS` commands. FTP, in its basic form, transmits usernames and passwords in plain text. Wireshark can capture and display these commands. The image highlights the `USER ketoan` and `PASS ispace` commands in the Wireshark capture.
+   *   **Step 1: Continue Analyzing Wireshark FTP Traffic.**  Re-examine the Wireshark capture filtered for FTP traffic (from Question 8). Focus on the FTP command stream initiated by the attacker's IP address (identified in Question 8).
+        *   **Why this step?**  We already know the attack involves FTP account theft, and we've identified the attacker's IP interacting with FTP.  The next step is to find the credential exchange within this traffic.
+    *   **Step 2: Look for USER and PASS Commands.** Within the FTP command stream, specifically look for the `USER` and `PASS` commands.  These are the standard FTP commands used to transmit the username and password during the authentication process.  Note that in basic FTP, these commands transmit credentials in *plain text*. The image highlights the `USER ketoan` and `PASS ispace` commands.
+        *   **Why this step?** The `USER` and `PASS` commands are the direct carriers of the FTP username and password. Identifying and examining these commands is the most direct way to recover the stolen credentials from a network capture of FTP traffic.
+    *   **Step 3: Extract Username and Password from Commands.** Extract the username from the `USER` command (e.g., `ketoan` in `USER ketoan`) and the password from the `PASS` command (e.g., `ispace` in `PASS ispace`).
+        *   **Why this step?** Extracting the username and password values from the `USER` and `PASS` commands provides the specific stolen FTP credentials, answering the question directly.
     *   **Answer (Account):** `ketoan`
     *   **Answer (Password):** `ispace`
-    *   **Why is this question relevant?**  Identifying stolen credentials (like FTP accounts) is critical because:
-        *   **Unauthorized Access:** Stolen FTP credentials can be used to gain unauthorized access to sensitive file servers and data.
-        *   **Data Breach:**  Compromised FTP accounts are often used to steal data from the FTP server or upload malware.
-        *   **Account Remediation:**  Stolen accounts need to have their passwords reset immediately and potentially be locked down to prevent further misuse.
-        *   **Security Policy Review:**  The fact that FTP credentials were stolen in plain text highlights a security vulnerability (using unencrypted FTP) that needs to be addressed.
+    *   **Relevance to Digital Forensics:**  Identifying stolen credentials (like FTP accounts) is critical because:
+        *   **Unauthorized Access Confirmation:** Recovering the stolen credentials confirms that the attacker successfully compromised an FTP account and obtained valid login information.
+        *   **Data Breach Potential:** Stolen FTP credentials can be immediately misused to gain unauthorized access to sensitive file servers and data stored on those servers. This can lead to data breaches, data theft, or malware uploads.
+        *   **Account Remediation Imperative:**  The compromised FTP account (`ketoan`) must have its password reset *immediately* and potentially be locked down to prevent further misuse by the attacker.  All accounts using the same or similar passwords should also be reviewed and strengthened.
+        *   **Highlighting Security Vulnerabilities:** The plain-text transmission of FTP credentials underscores a significant security vulnerability (using unencrypted FTP). This finding highlights the urgent need to address insecure protocols and enforce encrypted alternatives (like SFTP or FTPS) to protect sensitive information in transit.  This finding can drive security policy updates and infrastructure improvements.
 
-*   **Question 10:** Find the file that was leaked when the attacker exploited FTP and determine the MD5 hash of that file.
+---
+
+**Question 10: Identify the Leaked File and Calculate its MD5 Hash**
+
+**Question:** What is the name of the specific file that was leaked when the attacker exploited the compromised FTP account?  Furthermore, determine and record the MD5 hash of that leaked file.
 
 *   ![image](https://github.com/user-attachments/assets/9966e278-20e5-49b9-88ea-9137a1ee62d5)
 
@@ -176,207 +245,343 @@ Now we can proceed to answer the specific questions based on this decoded ASCII 
     Using the `Get-FileHash` command on PowerShell, we can calculate the MD5 hash of the newly exported file, which is "file-mat.docx".
     ![image](https://github.com/user-attachments/assets/949bd198-481e-4a66-b4c1-243ed343abb5)
 
-    *   **Step 1: Identify Data Transfer in Wireshark:** Examine the Wireshark FTP capture for commands that indicate data transfer, such as `RETR` (retrieve file). The image shows a `RETR file-mat.docx` command. This indicates the attacker downloaded the file "file-mat.docx" via FTP.
-    *   **Step 2: Export the File from Wireshark:** Wireshark allows you to export objects or files that are transmitted within network streams.  In Wireshark, you would typically right-click on the relevant FTP packet (e.g., a packet related to the `RETR` command or data transfer) and use "Follow TCP Stream" or "Export Objects" to save the file "file-mat.docx" from the captured network traffic.
-    *   **Step 3: Calculate MD5 Hash:** Once you have exported the "file-mat.docx" file, calculate its MD5 hash. The example uses PowerShell's `Get-FileHash` command: `Get-FileHash -Algorithm MD5 -Path "file-mat.docx"`.  You can use other tools like `md5sum` (Linux/macOS) or online MD5 hash calculators. *The MD5 hash value itself should be recorded here in a real investigation.*
+    *   **Step 1: Analyze Wireshark FTP Traffic for Data Retrieval Command.** Continue examining the Wireshark capture filtered for FTP traffic. Look for FTP commands that indicate data retrieval or file download from the FTP server to the attacker's machine.  The `RETR` (retrieve) command is the standard FTP command for downloading a file. The image shows a `RETR file-mat.docx` command.
+        *   **Why this step?** The `RETR` command directly indicates file download activity in FTP. Identifying this command reveals which file was downloaded by the attacker using the compromised FTP account.
+    *   **Step 2: Identify the File Name from RETR Command.** Extract the file name from the `RETR` command. In the example, the file name is `file-mat.docx` (from `RETR file-mat.docx`).
+        *   **Why this step?** Extracting the file name directly answers the first part of the question: identifying the specific file that was leaked.
+    *   **Step 3: Export the File Content from Wireshark.** Wireshark allows you to export the actual data payload of network streams, including files transferred via FTP. In Wireshark, locate a packet within the FTP data transfer stream related to the `RETR file-mat.docx` command. Right-click on this packet and use options like "Follow TCP Stream" or "Export Objects" (depending on Wireshark version and FTP stream structure) to export the file content as `file-mat.docx`.
+        *   **Why this step?** Exporting the file from Wireshark allows us to obtain a copy of the *actual* leaked file for further analysis, content review, and integrity verification.
+    *   **Step 4: Calculate the MD5 Hash of the Exported File.** Once you have exported `file-mat.docx`, calculate its MD5 hash. Use a hashing tool like `Get-FileHash -Algorithm MD5 -Path "file-mat.docx"` (PowerShell), `md5sum file-mat.docx` (Linux/macOS), or online MD5 hash calculators. Record the calculated MD5 hash value.
+        *   **Why this step?** Calculating the MD5 hash of the leaked file is critical for data integrity verification and future incident handling.
+            *   **Data Breach Confirmation:**  The exported file represents the actual data that was stolen in the data breach.
+            *   **Data Sensitivity Assessment:**  Having the file allows for content analysis to assess the sensitivity and value of the leaked information, which informs impact assessment and damage control.
+            *   **Impact Evaluation:**  Understanding the content of the leaked file is essential for evaluating the potential impact of the data breach on the organization or individuals whose data was compromised.
+            *   **Data Integrity Verification (Future):** The MD5 hash of the leaked file can be securely stored. If the original `file-mat.docx` file is later recovered from the compromised server, its MD5 hash can be compared to the hash of the leaked file. If the hashes match, it confirms that the exported file is an accurate and unaltered copy of the original leaked file. If the hashes *don't* match, it could indicate tampering or data corruption during the exfiltration or export process, warranting further investigation.
     *   **Answer (File Name):** `file-mat.docx`
-    *   **Answer (MD5 Hash):** *(The MD5 hash value of "file-mat.docx" would be inserted here after calculation)*
-    *   **Why is this question relevant?**  Identifying the leaked file and its hash is crucial for:
-        *   **Data Breach Confirmation:**  Confirming what specific data was stolen by the attacker.
-        *   **Data Sensitivity Assessment:**  Determining the sensitivity and value of the leaked file (e.g., is it confidential business data, personal information, etc.).
-        *   **Impact Assessment:**  Evaluating the potential impact of the data breach on the organization or individuals.
-        *   **Data Integrity Verification:**  The MD5 hash of the leaked file can be compared to the original file (if available) to verify if the file was modified during or after the exfiltration.
+    *   **Answer (MD5 Hash):**  *(The MD5 hash value of "file-mat.docx" would be inserted here after calculation and should be recorded in the investigation notes)*
+    *   **Relevance to Digital Forensics:**  Identifying the leaked file and its MD5 hash is crucial for:
+        *   **Data Breach Confirmation and Extent:**  Confirming precisely *what* data was stolen in the FTP data breach (the specific file `file-mat.docx`).
+        *   **Data Sensitivity and Value Assessment:**  Allowing for direct examination of the file content to determine the sensitivity and value of the compromised data. This informs risk assessment and prioritization of response efforts.
+        *   **Impact Assessment and Damage Control:**  Facilitating a thorough evaluation of the potential impact of the data breach, enabling appropriate damage control, notification procedures (if necessary), and remediation steps.
+        *   **Data Integrity and Chain of Custody:** The MD5 hash serves as a digital fingerprint of the leaked file, ensuring data integrity for future analysis, comparison, and potential legal proceedings. It helps maintain the chain of custody for this piece of digital evidence.
 
-*   **Question 11:** Ann's computer with IP address (192.168.1.158) sent a message over the wireless network to a strange computer that just connected to the network. Analyze the `pcap1.pcap` file to determine the account name that Ann used to log into the messaging system.
+---
+
+**Question 11: Determine Messaging Account Username from Network Traffic**
+
+**Question:** User "Ann" (IP address 192.168.1.158) sent a message over the wireless network to a suspicious computer that had recently connected. Analyze the `pcap1.pcap` file to determine the account username that Ann used to log in to the messaging system.
+
 ![image](https://github.com/user-attachments/assets/7d2897a9-831f-4111-b9a7-c6257074bc03)
 
-    *   **Step:** Analyze the `pcap1.pcap` file (presumably another Wireshark capture) focusing on traffic from Ann's computer (IP `192.168.1.158`) to a "strange computer" that recently connected to the network. The question mentions "messaging system". Examine network protocols and traffic patterns that might be related to messaging or chat applications. The image seems to show traffic related to some sort of messaging protocol.  The text points to "account name that Ann used to log into the messaging system" and provides the answer "user1".  *More detail is needed on how "user1" was extracted from the `pcap1.pcap` - specific protocol, filters, or data fields examined in Wireshark would be helpful.*
+  *   **Step 1: Open and Filter `pcap1.pcap` for Ann's Traffic.** Open the `pcap1.pcap` file in Wireshark. Apply a filter to isolate network traffic originating from Ann's computer, which has the IP address `192.168.1.158`. Use a Wireshark filter like `ip.src == 192.168.1.158`.
+        *   **Why this step?** The question focuses on Ann's communication, so filtering for her traffic streamlines the analysis and focuses on relevant network activity.
+    *   **Step 2: Identify Messaging Protocol Traffic.** Examine the filtered traffic from Ann's computer. Look for network protocols that are commonly associated with messaging or chat applications. This might include protocols like HTTP/HTTPS (for web-based messaging), proprietary messaging protocols, or potentially older protocols like IRC or instant messaging protocols if applicable in the scenario. The image seems to suggest some form of messaging protocol, but *more protocol detail would be beneficial here to provide specific filtering guidance*.
+        *   **Why this step?** Focusing on messaging protocol traffic is crucial to find evidence of messaging activity and potential login attempts related to the messaging system described in the question.
+    *   **Step 3: Search for Authentication or Login-Related Packets.** Within the identified messaging protocol traffic, look for packets that appear to be related to user authentication or login processes. This might involve looking for:
+        *   Packets with keywords like "login", "auth", "username", "password", "credentials" in the packet content or headers.
+        *   Packets exchanged with a server IP or hostname associated with the messaging service.
+        *   Packets that follow a typical authentication handshake pattern.
+        *   *Without more detail on the specific messaging protocol, it's difficult to provide precise filtering instructions here. Deeper protocol knowledge or further capture analysis would be required.*
+        *   **Why this step?** Authentication packets are the most likely place to find usernames used for login. Identifying these packets is key to recovering the account name.
+    *   **Step 4: Extract Username from Authentication Packets.** Once you've located potential authentication packets, examine the packet details and attempt to extract the username. The method for extraction will depend heavily on the specific messaging protocol used and how it transmits usernames. *Without protocol specifics, it's impossible to give a precise extraction method.* The text simply states the answer is "user1", suggesting the username was found within the captured traffic, but the *exact steps* are not detailed in the provided materials.
+        *   **Why this step?** Extracting the username answers the core question: identifying the messaging account username used by Ann.
     *   **Answer:** `user1`
-    *   **Why is this question relevant?**  Analyzing messaging system activity is important for:
-        *   **Communication Analysis:**  Understanding who is communicating with whom, the content of communications, and the timing of messages.
-        *   **Insider Threat Detection:**  Investigating suspicious communication patterns that might indicate insider threats or unauthorized data sharing.
-        *   **Evidence of Coordination:** In some cases, message logs can provide evidence of coordination between attackers or accomplices.
+    *   **Relevance to Digital Forensics:**  Analyzing messaging system activity and recovering usernames are important because:
+        *   **Communication Analysis:** Understanding who is communicating with whom, the nature of their communications, and the timing of messages can provide valuable context in an investigation.
+        *   **Insider Threat Detection:** Investigating suspicious communication patterns can help identify potential insider threats, unauthorized data sharing, or policy violations.
+        *   **Evidence of Coordination:** In some cases, message logs or network captures can provide evidence of coordination between attackers, accomplices, or individuals involved in illicit activities.
 
-*   **Question 12:** What is the MD5 hash of the file that Ann sent out?
+---
+
+**Question 12: Determine MD5 Hash of File Sent via Messaging System**
+
+**Question:** What is the MD5 hash of the file that user "Ann" sent out via the messaging system?
+
 ![image](https://github.com/user-attachments/assets/f2fada8c-6436-42e3-b416-aa9346f9a8f4)
 
-    Here we can see that Ann was lured by a girl, took a file from the server and sent it out. That file is named `recipe.docx`.
-    *   *(Note: The MD5 hash value of `recipe.docx` would be here if calculated)*
+ Here we can see that Ann was lured by a girl, took a file from the server and sent it out. That file is named `recipe.docx`.
+ 
+ *   *(Note: The MD5 hash value of `recipe.docx` would be here if calculated)*
+ *   
 ![image](https://github.com/user-attachments/assets/59cd71e2-617b-47d8-85bd-12f06f671e6e)
 
-    *   **Step 1: Identify File Transfer in Network Capture:** Analyze `pcap1.pcap` (or related network capture if it's a different one) to identify network traffic related to Ann sending a file. The question mentions "file that Ann sent out" and "recipe.docx".  The image indicates the file name `recipe.docx`.  *Again, more detail is needed on *how* `recipe.docx` was identified in the network capture. Protocol, filters, or specific data fields would be helpful.*
-    *   **Step 2: Export the File (if possible):** If the file `recipe.docx` was transmitted over the network in a way that allows for file extraction from the network capture (e.g., through HTTP file upload, FTP data transfer, or a file transfer protocol within the messaging system), export the file from Wireshark.
-    *   **Step 3: Calculate MD5 Hash:** Calculate the MD5 hash of the exported `recipe.docx` file using tools like `Get-FileHash` (PowerShell), `md5sum` (Linux/macOS), or online MD5 calculators. *The MD5 hash value should be recorded here.*
-    *   **Answer (MD5 Hash):** *(The MD5 hash value of "recipe.docx" would be inserted here after calculation)*
-    *   **Why is this question relevant?**  Similar to Question 10, identifying the leaked file and its hash is crucial for:
-        *   **Data Breach Assessment:**  Determining what specific file was sent out.
-        *   **Content Analysis:** Examining the contents of `recipe.docx` to understand its nature and sensitivity.
-        *   **Impact Evaluation:** Assessing the potential impact of leaking this specific file.
-        *   **Integrity Verification:** MD5 hash helps verify file integrity if a copy of the original `recipe.docx` exists for comparison.
+  *   **Step 1: Analyze Network Capture for File Transfer Activity.** Re-examine the `pcap1.pcap` file (or the relevant network capture if it's different) for network traffic related to Ann sending a file via the messaging system. Look for traffic patterns or protocol indicators that suggest file transfer. The question mentions "file that Ann sent out" and `recipe.docx`. The image mentions `recipe.docx`. *Again, protocol specifics for the messaging system are needed for precise filtering guidance.*
+        *   **Why this step?** File transfer activity within messaging traffic is the key to identifying the file being sent. Focusing on file transfer patterns in Ann's traffic will lead to the target file.
+    *   **Step 2: Identify the File Name (`recipe.docx`).** Locate the network traffic that indicates a file transfer and identify the file name being transferred. The text and image point to the file name `recipe.docx`. *The exact method for identifying the file name in the network capture is not detailed and would depend on the messaging protocol.*
+        *   **Why this step?** Identifying the file name directly answers part of the question and tells us which file to focus on for hash calculation.
+    *   **Step 3: Export the File Content from the Network Capture.** If the file `recipe.docx` was transmitted in a way that allows for file extraction from the network capture (e.g., through HTTP file upload within the messaging system, or a file transfer protocol embedded in the messaging protocol), export the file's content from Wireshark. The export method will depend on the protocol.
+        *   **Why this step?** Exporting the file from the network capture allows us to obtain a copy of the *actual* file that Ann sent for analysis, content review, and hash calculation.
+    *   **Step 4: Calculate the MD5 Hash of the Exported File (`recipe.docx`).** Once you have exported `recipe.docx`, calculate its MD5 hash using a hashing tool (PowerShell `Get-FileHash`, `md5sum`, online calculators). Record the MD5 hash value.
+        *   **Why this step?** Calculating the MD5 hash of `recipe.docx` is crucial for data integrity verification and future analysis.  Similar to Question 10, the MD5 hash provides a digital fingerprint and allows for comparison with other copies of the file to ensure integrity and track potential modifications.
+    *   **Answer (MD5 Hash):** *(The MD5 hash value of "recipe.docx" would be inserted here after calculation and should be recorded in investigation notes)*
+    *   **Relevance to Digital Forensics:** Similar to Question 10, identifying the leaked file and its hash is crucial for:
+        *   **Data Breach Assessment:** Confirming the specific file (`recipe.docx`) sent via the messaging system represents a potential data leak or unauthorized data sharing incident.
+        *   **Content Analysis and Sensitivity Assessment:**  Enabling examination of the contents of `recipe.docx` to understand its nature, sensitivity, and potential impact of its unauthorized transmission.
+        *   **Impact Evaluation and Remediation:**  Facilitating assessment of the potential impact of this file being sent and informing appropriate remediation steps (e.g., policy review, user training regarding data handling).
+        *   **Data Integrity and Chain of Custody:** The MD5 hash provides a verifiable fingerprint of the file, essential for maintaining data integrity and chain of custody if the file becomes evidence in an investigation.
 
-*   **Question 13:** What is the system timezone?
+---
 
-    Using digital forensics software, view the `web-server-linux-003.ad1` file.
+**Question 13: Determine System Timezone**
+
+**Question:** What is the system timezone configured on the compromised Linux server?
+
+Using digital forensics software, view the `web-server-linux-003.ad1` file.
+    
 ![image](https://github.com/user-attachments/assets/4084cb1a-46d9-453a-b617-362442a85a2e)
 
-    *   **Step 1: Open Image File in Forensic Software:** The question mentions "digital forensics software" and the file `web-server-linux-003.ad1`.  `.ad1` is a common forensic image format (AccessData Disk Image). Use forensic software capable of analyzing `.ad1` images (e.g., Autopsy, EnCase, FTK Imager, X-Ways Forensics). Open the `web-server-linux-003.ad1` image in the chosen software.
-    *   **Step 2: Locate System Timezone Information:** Forensic software typically parses system configuration files and metadata from disk images. Look for sections or features within the software that display system information, operating system details, or configuration settings.  In Linux systems, timezone information is often stored in files like `/etc/timezone` or `/etc/localtime`. The image from Autopsy shows "Time Zone: Europe/Brussels" in the "Operating System Information" section.
+ *   **Step 1: Open Forensic Image in Digital Forensics Software.**  Use digital forensics software capable of analyzing disk images, especially `.ad1` format (like Autopsy, EnCase, FTK Imager, X-Ways Forensics). Open the provided image file `web-server-linux-003.ad1` within the chosen software.
+        *   **Why this step?** Forensic software provides specialized tools for analyzing disk images, parsing file systems, and extracting system information, making it efficient for tasks like timezone identification.
+    *   **Step 2: Navigate to System Information or Operating System Details Section.** Most forensic software will automatically parse and present system information from a disk image. Look for a section within the software's interface that displays "System Information", "Operating System Details", "System Overview", or a similar category.
+        *   **Why this step?** Forensic software often extracts key system configuration details and presents them in a readily accessible summary view, simplifying the process of finding information like timezone settings.
+    *   **Step 3: Locate Timezone Information.** Within the System Information or OS Details section, look for a field labeled "Time Zone", "Timezone", or similar. The image from Autopsy clearly shows "Time Zone: Europe/Brussels" in the "Operating System Information" section.
+        *   **Why this step?** Forensic software is designed to parse and display key system settings, making finding the timezone information straightforward in the appropriate section of the tool.
     *   **Answer:** `Europe/Brussels`
-    *   **Why is this question relevant?**  Determining the system timezone is important for:
-        *   **Timestamp Correlation:**  Accurately interpreting timestamps from log files, file system metadata, and other artifacts. Timestamps are often recorded in local system time. Knowing the timezone allows you to convert them to a standard timezone (like UTC/GMT) for consistent analysis and correlation across different systems or data sources.
-        *   **Event Reconstruction:**  Building accurate timelines of events requires understanding the timezone in which events were recorded.
-        *   **Geographic Context (Potentially):**  Timezone can sometimes provide clues about the geographic location of the system or user.
+    *   **Relevance to Digital Forensics:** Determining the system timezone is important for:
+        *   **Timestamp Correlation Accuracy:**  Ensuring accurate interpretation of timestamps from log files, file system metadata, and other digital artifacts. Timestamps are often recorded in local system time. Knowing the timezone allows for correct conversion to a standardized timezone (like UTC/GMT) for consistent analysis and correlation across different systems and data sources.
+        *   **Accurate Event Timeline Construction:** Building precise timelines of events is critical in investigations. Timezone information is essential for placing events in the correct chronological order and understanding the timing of activities relative to other systems and time zones.
+        *   **Geographic Context Clues:**  While not definitive, the timezone can sometimes provide clues about the geographic location of the system, user, or attacker, especially if correlated with other location-based data.
 
-*   **Question 14:** Who was the last user to log in to the system?
+---
+
+**Question 14: Determine Last User to Log In**
+
+**Question:** Based on the system logs, identify the username of the *last* user who successfully logged in to the compromised system.
+
 ![image](https://github.com/user-attachments/assets/8eaf755c-461b-4c42-8902-e538b1cac2d5)
 
-    Extract the `auth.log` file.
+Extract the `auth.log` file.
 
-    Put it into Kali Linux.
+ Put it into Kali Linux.
+    
 ![image](https://github.com/user-attachments/assets/a9803a0e-3bbc-46a5-aa3a-8b6cffc0ab9d)
 
-    Put the "accepted password" (successful login) logs from the file into the `accepted_logins` file.
+Put the "accepted password" (successful login) logs from the file into the `accepted_logins` file.
+
 ![image](https://github.com/user-attachments/assets/10def0ca-8770-47f5-a125-524fc4326a58)
 
-    Use the `sort` command to see the last log (last user) successfully logged in, which is root.
+Use the `sort` command to see the last log (last user) successfully logged in, which is root.
 
-    ![image](https://github.com/user-attachments/assets/dade1fdd-37e8-4e3c-859f-e387e14b7c4b)
+ ![image](https://github.com/user-attachments/assets/dade1fdd-37e8-4e3c-859f-e387e14b7c4b)
 
-    *   **Step 1: Extract `auth.log` from Image:** The question refers to `auth.log` and a forensic image (`web-server-linux-003.ad1` implied from Question 13). Extract the `auth.log` file from the `/var/log` directory within the `.ad1` image. You can use forensic software to browse the file system within the image and export the `auth.log` file.
-    *   **Step 2: Transfer to Kali Linux (Analysis System):**  Transfer the extracted `auth.log` file to a Kali Linux system (or another Linux system with command-line tools) for easier log analysis.
-    *   **Step 3: Filter for Successful Logins:** Filter the `auth.log` file to keep only lines indicating successful logins. The example uses `grep "Accepted password"` to extract lines containing "Accepted password," which is a common log message for successful SSH logins in `auth.log`.  `grep "Accepted password" auth.log > accepted_logins`
-    *   **Step 4: Sort Logins Chronologically (Reverse Order):** Sort the filtered login logs chronologically in reverse order (newest to oldest) to find the last login.  The example uses `sort -r accepted_logins`. The `-r` option for `sort` reverses the sorting order.  By sorting in reverse chronological order, the last entry in the sorted output will represent the most recent successful login.
-    *   **Step 5: Identify Last User:** Examine the last line in the sorted output. The example shows the last line is related to a root login.
+   *   **Step 1: Extract `auth.log` from Disk Image.** Use digital forensics software or command-line tools (if familiar with file system navigation within images) to extract the `auth.log` file from the `/var/log/` directory within the `web-server-linux-003.ad1` disk image.
+        *   **Why this step?** `auth.log` is the primary log file on many Linux systems that records authentication-related events, including successful logins, failed logins, and user authentication attempts. It's the key source for identifying login activity.
+    *   **Step 2: Transfer `auth.log` to Analysis System (e.g., Kali Linux).** Transfer the extracted `auth.log` file to a system with suitable command-line tools for log analysis, such as a Kali Linux virtual machine. This facilitates efficient text processing and log filtering.
+        *   **Why this step?** Kali Linux and other Linux distributions offer powerful command-line utilities (like `grep`, `sort`, `awk`, `sed`) that are highly effective for log analysis and text manipulation. Transferring the log file to such a system enables efficient analysis.
+    *   **Step 3: Filter `auth.log` for Successful Login Events.** Use `grep` (or a similar text filtering tool) to extract only the lines from `auth.log` that indicate successful logins. Filter for log entries containing keywords like "Accepted password" (common for SSH successful logins in `auth.log`). Save the filtered output to a new file, e.g., `accepted_logins`.  Command: `grep "Accepted password" auth.log > accepted_logins`
+        *   **Why this step?** Filtering for successful login events isolates the specific log entries we need to answer the question, removing noise from other log data and making analysis more focused.
+    *   **Step 4: Sort Successful Login Logs in Reverse Chronological Order.** Use the `sort` command with the `-r` (reverse) option to sort the `accepted_logins` file chronologically in reverse order (newest to oldest).  Command: `sort -r accepted_logins`.
+        *   **Why this step?** Sorting in reverse chronological order places the *most recent* successful login event at the *beginning* of the sorted output. This makes it easy to identify the last login.
+    *   **Step 5: Identify Last Logged-In User.** Examine the *first* line (because of reverse sorting) of the sorted `accepted_logins` file. This line will represent the most recent successful login event. Extract the username from this log line. The example shows the last login is related to the `root` user.
+        *   **Why this step?** The first line of the reversed-sorted successful login logs directly answers the question: identifying the *last* user who successfully logged in to the system.
     *   **Answer:** `root`
-    *   **Why is this question relevant?**  Identifying the last logged-in user is useful for:
-        *   **User Activity Tracking:**  Understanding who was recently active on the system.
-        *   **Account Compromise Assessment:** If the last login is by an unexpected user (especially a privileged account like root), it could indicate unauthorized access or account compromise.
-        *   **Timeline Context:**  The timestamp of the last login provides a point of reference for building a timeline of events.
+    *   **Relevance to Digital Forensics:**  Identifying the last logged-in user is useful for:
+        *   **Recent User Activity Tracking:**  Understanding who was most recently active on the system. This can help establish a timeline of user actions and identify potential users of interest.
+        *   **Account Compromise Assessment:** If the last login is by an unexpected user, especially a privileged account like `root`, or occurs at an unusual time, it can indicate unauthorized access, account compromise, or malicious activity.  A `root` login, especially if unexpected, is often a red flag.
+        *   **Timeline Context and Event Sequencing:** The timestamp of the last login provides a recent point of reference in time for building a chronological timeline of events. It can help establish the sequence of actions and the recency of user interaction with the system.
 
-*   **Question 15:** How many users have a login shell?
+---
+
+**Question 15: Count Users with Login Shells**
+
+**Question:** How many user accounts on the system are configured with a valid login shell, indicating they are intended for interactive logins?
+
 ![image](https://github.com/user-attachments/assets/b8e00bf5-9f5a-4e92-b679-91e01a4bc963)
 
-    Extract the `passwd` file from `/etc`.
+ Extract the `passwd` file from `/etc`.
 
-    Continue to put it into Kali.
+  Continue to put it into Kali.
+  
 ![image](https://github.com/user-attachments/assets/acab02a9-79c8-4b8d-91e1-898d4a660ced)
 
-    Use the `awk` command to count how many users in the `passwd` file just put in have a login shell:
-    ![image](https://github.com/user-attachments/assets/bd9e216f-bcdc-4968-9d3e-4849725130d6)
+   Use the `awk` command to count how many users in the `passwd` file just put in have a login shell:
+    
+ ![image](https://github.com/user-attachments/assets/bd9e216f-bcdc-4968-9d3e-4849725130d6)
 
-    *   **Step 1: Extract `passwd` File:** Extract the `/etc/passwd` file from the `.ad1` image. The `/etc/passwd` file on Linux systems contains user account information.
-    *   **Step 2: Transfer to Kali Linux:** Transfer the `passwd` file to Kali Linux.
-    *   **Step 3: Use `awk` to Count Login Shells:** Use the `awk` command to process the `passwd` file and count users with a login shell.
-        *   `awk -F':' '$7 != "/sbin/nologin" && $7 != "/bin/false" { count++ } END { print count }' passwd`
-        *   `-F':'`: Sets the field separator to colon (`:`) because fields in `/etc/passwd` are separated by colons.
-        *   `'$7 != "/sbin/nologin" && $7 != "/bin/false"'`: This is the condition. `$7` refers to the 7th field in each line of `/etc/passwd`, which is the login shell field. The condition checks if the login shell is *not* equal to `/sbin/nologin` and *not* equal to `/bin/false`.  Users with `/sbin/nologin` or `/bin/false` as their login shell are typically system accounts or accounts that are not intended for interactive logins.
-        *   `{ count++ }`: If the condition is true (the user has a login shell), increment the `count` variable.
-        *   `END { print count }`: After processing all lines, print the final value of `count`.
-    *   **Answer:** `06` (meaning 6 users have a login shell)
-    *   **Why is this question relevant?**  Counting users with login shells helps to:
-        *   **User Account Audit:**  Understand the number of interactive user accounts on the system.
-        *   **Security Assessment:**  Reduce the attack surface by disabling login shells for system accounts or service accounts that do not require interactive logins.
-        *   **Account Management:**  Identify and manage user accounts, ensuring that only necessary accounts have login shells.
+ *   **Step 1: Extract `/etc/passwd` File from Disk Image.** Use forensic software or command-line tools to extract the `/etc/passwd` file from the `/etc/` directory within the `web-server-linux-003.ad1` disk image.
+        *   **Why this step?** The `/etc/passwd` file is a critical system file on Linux systems that contains essential information about user accounts, including usernames, user IDs, group IDs, home directories, and login shells. It's the primary source for user account data.
+    *   **Step 2: Transfer `/etc/passwd` to Analysis System (e.g., Kali Linux).** Transfer the extracted `/etc/passwd` file to a system with command-line text processing tools, like Kali Linux.
+        *   **Why this step?**  Kali Linux provides powerful tools like `awk` and `grep` that are well-suited for parsing structured text files like `/etc/passwd` and performing data extraction and counting operations.
+    *   **Step 3: Use `awk` to Count Users with Login Shells.** Employ the `awk` command to process the `/etc/passwd` file and count the number of user accounts that have a login shell configured. Use the `awk` command provided in the original document:
+        `awk -F':' '$7 != "/sbin/nologin" && $7 != "/bin/false" { count++ } END { print count }' passwd`
+        *   **Why this step?** The `awk` command efficiently parses the `/etc/passwd` file and applies specific criteria to count only user accounts that have a *valid login shell*.
+            *   `-F':'`: Sets the field separator to a colon (`:`) to correctly parse the colon-separated fields in `/etc/passwd`.
+            *   `'$7 != "/sbin/nologin" && $7 != "/bin/false"'`: This is the core filtering condition. It checks if the 7th field (`$7`, the login shell field in `/etc/passwd`) is *not* equal to `/sbin/nologin` *and* is *not* equal to `/bin/false`. User accounts with `/sbin/nologin` or `/bin/false` as their login shell are typically system accounts, service accounts, or accounts that are deliberately disabled for interactive logins. They are not intended for direct user logins.
+            *   `{ count++ }`: If the condition is true (the user has a login shell other than `/sbin/nologin` or `/bin/false`), it increments a counter variable named `count`.
+            *   `END { print count }`: After processing all lines in `/etc/passwd`, the `END` block executes, and it prints the final value of the `count` variable, which represents the total number of users with valid login shells.
+    *   **Answer:** `06` (meaning 6 user accounts have a login shell)
+    *   **Relevance to Digital Forensics:**  Counting users with login shells is relevant for:
+        *   **User Account Audit and Inventory:** Understanding the total number of interactive user accounts on the system. This provides a basic inventory of potentially active user accounts.
+        *   **Security Posture Assessment:** Reducing the number of users with login shells, especially for system accounts or service accounts that do not require interactive logins, is a security best practice. Limiting login shells reduces the attack surface and the potential for unauthorized interactive access.
+        *   **Account Management and Security Hardening:** Identifying accounts with login shells allows for review and management of user accounts. It helps ensure that only necessary accounts have interactive login capabilities, strengthening the system's overall security posture.
 
-*   **Question 16:** Put the logs related to user addition into the `b.txt` file for analysis.
+---
+
+**Question 16: Analyze Logs Related to User Account Addition**
+
+**Question:** Extract log entries specifically related to user account addition activities and save these extracted log lines to a file named `b.txt` for further analysis.
+
 ![image](https://github.com/user-attachments/assets/e93232f9-5dff-4ef4-a50f-22570a075c14)
 ![image](https://github.com/user-attachments/assets/ac3859f2-c67b-4c9e-a81f-8186980f6d38)
 
-    User `vulnosadmin` created user `webmin`.
+ User `vulnosadmin` created user `webmin`.
 
-    This is also displayed in the `bash_history` log of this user.
+ This is also displayed in the `bash_history` log of this user.
 ![image](https://github.com/user-attachments/assets/5660e146-46e3-4b69-a326-76f3dce8c8af)
 
-    *   **Step 1: Identify User Addition Logs:** The question asks for "logs related to user addition".  On Linux systems, user addition events are often logged in files like `auth.log`, `audit.log`, or `syslog`.  The images show `auth.log` being examined.
-    *   **Step 2: Filter for User Addition Events:** Filter the `auth.log` (or relevant log file) for events related to user creation commands like `useradd`, `adduser`, or similar commands.  The images show lines from `auth.log` containing `useradd webmin` which indicates the creation of the user "webmin".
-    *   **Step 3: Save Filtered Logs to `b.txt`:** Save the filtered log lines to a file named `b.txt` (as requested in the question) for further analysis. `grep "useradd" auth.log > b.txt` (or similar command).
-    *   **Step 4: Examine User `vulnosadmin`'s `bash_history`:** The text also mentions checking `bash_history` of user `vulnosadmin`.  `bash_history` files store commands executed by users in their bash shell.  Examine the `bash_history` file for the user `vulnosadmin` (typically located in `/home/vulnosadmin/.bash_history` - you would need to extract this from the image).  The image shows the `bash_history` file of `vulnosadmin` containing the `useradd webmin` command, confirming that user `vulnosadmin` created the user `webmin`.
-    *   **Why is this question relevant?**  Analyzing user addition logs and command history helps to:
-        *   **Identify Unauthorized Account Creation:** Detect creation of user accounts that were not authorized or are suspicious.
-        *   **Attribute Actions to Users:**  Determine which user performed the user creation action (in this case, `vulnosadmin`).
-        *   **Understand Post-Compromise Activity:**  User creation is often part of post-compromise activity by attackers to establish persistence or create backdoors.
+ *   **Step 1: Identify Relevant Log Files for User Addition Events.** Determine which log file(s) on the Linux system are likely to record user account addition events. Common log files for user management actions include `auth.log`, `audit.log`, `syslog`, and potentially security-specific logs depending on the system's security configuration. In this case, the images show `auth.log` being examined.
+        *   **Why this step?** Different Linux distributions and security configurations may log user management events in different log files. Knowing the relevant log files is crucial for targeted log analysis.
+    *   **Step 2: Filter Log File(s) for User Addition Keywords.** Use `grep` (or a similar text filtering tool) to filter the identified log file(s) for keywords and commands associated with user account creation. Common keywords include `useradd`, `adduser`, `create user`, `account created`, etc. The images show filtering `auth.log` for `"useradd"`.
+        *   **Why this step?** Filtering for user addition keywords isolates the specific log entries that are relevant to user account creation activities, removing irrelevant log data and focusing the analysis on the target events.
+    *   **Step 3: Save Filtered Log Lines to `b.txt` File.** Redirect the output of the `grep` command (containing the filtered log lines) to a file named `b.txt`, as requested in the question. Command: `grep "useradd" auth.log > b.txt` (or similar, depending on the log file and keywords used).
+        *   **Why this step?** Saving the filtered log lines to a separate file (`b.txt`) allows for:
+            *   **Organized Data Storage:**  Keeping the user addition logs separate for focused analysis and reporting.
+            *   **Easier Review and Sharing:**  Facilitating easier review of the user addition events and sharing the extracted log data with other investigators or stakeholders.
+            *   **Further Analysis with Other Tools:** Enabling the use of other text analysis tools or scripts on the `b.txt` file if needed for deeper investigation.
+    *   **Step 4: Examine User `vulnosadmin`'s `bash_history` (Optional but Recommended).**  As a supplementary step (and as indicated in the provided text), examine the `.bash_history` file of the user `vulnosadmin` (typically located at `/home/vulnosadmin/.bash_history`). Check for commands related to user creation, particularly the `useradd` command. The images show that `vulnosadmin`'s `bash_history` contains the `useradd webmin` command.
+        *   **Why this step?** Examining `bash_history` provides an *additional* source of evidence to corroborate the user creation events found in system logs and to attribute the action to a specific user (`vulnosadmin`). `bash_history` logs commands executed by users directly, offering a more direct record of user actions than system logs alone.
+    *   **Observation:** The analysis reveals that user `vulnosadmin` created the user account `webmin`. This user creation event is recorded in both `auth.log` (system log) and `vulnosadmin`'s `.bash_history` (user command history), providing converging evidence.
+    *   **Relevance to Digital Forensics:**  Analyzing user addition logs and command history is important to:
+        *   **Detect Unauthorized Account Creation:** Identify user accounts that were created without proper authorization or are potentially malicious.
+        *   **Attribute Actions to Specific Users:** Determine which user account was used to perform the user creation action, enabling attribution and accountability. In this case, it attributes the creation of `webmin` to `vulnosadmin`.
+        *   **Reconstruct Post-Compromise Activity:** User account creation is a common post-compromise action by attackers. Analyzing these logs helps reconstruct the attacker's activities after gaining initial access, such as establishing persistence or creating backdoors.
 
-*   **Question 17:** How many users have sudo access?
+---
 
-    Thus, the users who can use sudo here are: `root`, `php`, `mail`
+**Question 17: Count Users with Sudo Access**
+
+**Question:** Determine the number of user accounts on the system that are configured with `sudo` access, granting them elevated privileges.
+
+  Thus, the users who can use sudo here are: `root`, `php`, `mail`
     *   **Answer:** `3`
-    *   **Step:** The question implicitly assumes you've already identified users with sudo access in previous analysis (though the steps aren't explicitly detailed here).  **How to determine sudo access?**  On Linux systems, sudo access is typically controlled by the `/etc/sudoers` file or files in the `/etc/sudoers.d/` directory.  You would need to:
-        *   **Extract `/etc/sudoers` and `/etc/sudoers.d/`:** Extract these files/directories from the `.ad1` image.
-        *   **Analyze `sudoers` Files:** Examine the contents of `/etc/sudoers` and files in `/etc/sudoers.d/`. These files define sudo rules. Look for lines that grant sudo privileges to users or groups.  Common indicators include lines starting with user or group names followed by `ALL=(ALL:ALL) ALL` (or similar sudo rules).
-        *   **Identify Sudo Users:** Based on the `sudoers` file analysis, identify the users who are explicitly granted sudo access. The text lists `root`, `php`, and `mail` as users with sudo access. *More detail would be needed on exactly *how* these users were identified from the `sudoers` configuration.*
+    *   **Step 1: Extract and Examine `/etc/sudoers` and `/etc/sudoers.d/`.** Extract the `/etc/sudoers` file and the entire `/etc/sudoers.d/` directory from the `web-server-linux-003.ad1` disk image. These files control `sudo` permissions on Linux systems.
+        *   **Why this step?** `/etc/sudoers` and `/etc/sudoers.d/` are the *definitive* configuration files that define sudo access rights on Linux systems. Analyzing these files is essential to determine which users or groups have sudo privileges.
+    *   **Step 2: Analyze `sudoers` Files for Sudo Rules.** Open and examine the contents of `/etc/sudoers` and each file within `/etc/sudoers.d/`. Look for lines that grant sudo privileges to users or groups. Common indicators of sudo access include lines starting with user or group names followed by rules like `ALL=(ALL:ALL) ALL` or more specific sudo rule sets.
+        *   **Why this step?** Sudo rules in these configuration files explicitly define which users or groups are granted elevated privileges and under what conditions. Parsing these rules is necessary to identify sudo-enabled accounts.
+    *   **Step 3: Identify Users with Sudo Access.** Based on the analysis of the `sudoers` rules, identify the specific usernames that are explicitly granted `sudo` access. The provided text lists `root`, `php`, and `mail` as having sudo access. *The specific rules in `/etc/sudoers` that grant these users sudo access are not detailed in the provided materials and would require further examination of the actual `sudoers` files.*
+        *   **Why this step?** Identifying the *usernames* with sudo access directly answers the question and provides a list of privileged accounts on the system.
+    *   **Step 4: Count Sudo Users.** Count the number of unique usernames identified as having `sudo` access. The answer provided is `3`.
+        *   **Why this step?** Counting the number of sudo users provides a quantitative measure of the system's privileged account landscape. This number is important for security audits, risk assessments, and understanding the potential impact of account compromise.
     *   **Answer:** `3`
-    *   **Why is this question relevant?**  Knowing which users have sudo (superuser) access is critical for security assessment:
-        *   **Privilege Management:**  Sudo access grants users elevated privileges to run commands as root.  Limiting sudo access to only necessary users is a key security principle.
-        *   **Security Risk Assessment:**  Users with sudo access pose a higher security risk if their accounts are compromised because attackers can gain full control of the system.
-        *   **Compliance Auditing:**  Compliance regulations often require organizations to control and audit sudo access.
+    *   **Relevance to Digital Forensics:** Knowing which users have `sudo` (superuser) access is critical for security assessment and incident response because:
+        *   **Privilege Management and Least Privilege Principle:** Sudo access grants users elevated privileges to execute commands as root, the most powerful user on a Linux system. Understanding sudo access helps assess if the principle of least privilege is being followed (granting only necessary privileges).
+        *   **Security Risk Assessment:** Users with `sudo` access pose a significantly higher security risk if their accounts are compromised because attackers can gain full root-level control of the system. Identifying sudo users highlights high-value target accounts.
+        *   **Impact Assessment of Account Compromise:** If a user with `sudo` access is compromised, the potential impact is much greater than if a standard user account is compromised. Knowing sudo users is crucial for understanding the potential damage from account breaches.
+        *   **Compliance and Auditing Requirements:** Many security compliance regulations require organizations to strictly control and audit sudo access. Identifying sudo users is a key step in meeting these compliance requirements and demonstrating proper access controls.
 
-*   **Question 18:** Which file did the user 'root' delete?
+---
 
-    Go into root's history to see. Here there is an `rm` command, it removes file `37292.c`.
-    ![image](https://github.com/user-attachments/assets/37ec87f2-2596-48c5-bfc9-d8fe6a979e9d)
+**Question 18: Identify File Deleted by the Root User**
+
+**Question:** Which specific file was deleted by the `root` user account on the system?
+
+ Go into root's history to see. Here there is an `rm` command, it removes file `37292.c`.
+    
+![image](https://github.com/user-attachments/assets/37ec87f2-2596-48c5-bfc9-d8fe6a979e9d)
 ![image](https://github.com/user-attachments/assets/4cd157d5-ca45-4435-8216-0333ab66964f)
 
-    *   **Step 1: Examine Root's `bash_history`:** The question directs you to "root's history".  On Linux, root's command history is typically stored in `/root/.bash_history`.  Extract the `/root/.bash_history` file from the `.ad1` image.
-    *   **Step 2: Analyze `bash_history` for `rm` Command:** Examine the contents of `root/.bash_history` file. Look for commands that involve file deletion, specifically the `rm` (remove) command. The images show a line in `root/.bash_history`: `rm 37292.c`.
+ *   **Step 1: Extract Root User's `.bash_history` File.** Extract the `.bash_history` file from the `/root/` directory within the `web-server-linux-003.ad1` disk image. This file stores the command history for the `root` user's bash shell.
+        *   **Why this step?** The `.bash_history` file for the `root` user is the primary source of information about commands executed by the `root` user on the system. It's the most direct place to look for commands initiated by `root`, including file deletion attempts.
+    *   **Step 2: Analyze `.bash_history` for `rm` Commands.** Open and examine the contents of the extracted `/root/.bash_history` file. Search for commands related to file deletion, specifically the `rm` command (remove). `rm` is the standard command in Linux and Unix-like systems for deleting files and directories.
+        *   **Why this step?** The `rm` command is the direct indicator of file deletion actions. Filtering for `rm` commands within `root`'s command history will reveal files that `root` attempted to delete.
+    *   **Step 3: Identify the Deleted File Name.** Locate the specific `rm` command line within `.bash_history` that indicates a file deletion action. Extract the file name that is being targeted by the `rm` command. The images show the command line `rm 37292.c` within `root`'s history.
+        *   **Why this step?** Extracting the file name from the `rm` command directly answers the question: identifying the specific file that was deleted by the `root` user.
     *   **Answer:** `37292.c`
-    *   **Why is this question relevant?**  Tracking file deletion activity by root (or any user) can be important for:
-        *   **Data Tampering Detection:**  Identifying if important files were deleted, potentially to hide evidence or disrupt system operation.
-        *   **Understanding User Actions:**  Reconstructing user activity and understanding what files users were working with and potentially removing.
-        *   **Malware Analysis:**  Malware might delete files as part of its cleanup or evasion techniques.
+    *   **Relevance to Digital Forensics:**  Tracking file deletion activity by `root` or any user is important for:
+        *   **Data Tampering Detection:**  Identifying if critical system files, logs, or user data files have been deleted, potentially to hide evidence of malicious activity or disrupt system operation. File deletion can be a sign of data tampering or attempts to cover tracks.
+        *   **Reconstructing User Actions and Intent:**  Understanding what files users were working with and potentially removing can provide context about user activities, system administration actions, or potential malicious intent if deletions are suspicious.
+        *   **Malware Analysis and Evasion Techniques:** Malware or attackers might delete files as part of their cleanup process to remove traces of their presence, evade detection by security tools, or disrupt forensic analysis. Tracking deleted files can reveal malware behavior and evasion tactics.
 
-*   **Question 19:** What Content Management System (CMS) is installed on the machine?
+---
+
+**Question 19: Identify the Content Management System (CMS) Installed**
+
+**Question:** What Content Management System (CMS) is installed and running on the web server?
+
 *   ![image](https://github.com/user-attachments/assets/186dce0d-5c76-4096-b10d-15c61e2de496)
 
-    *   **Step:** The image shows a web browser accessing a URL (`http://192.168.1.103/`).  The text displayed in the browser window is a default page for "Drupal". Drupal is a popular open-source Content Management System (CMS).  Accessing the web server's root directory in a browser often reveals a default CMS page if a CMS is installed.
+    *   **Step 1: Access the Web Server via Web Browser.** Open a web browser and navigate to the IP address or hostname of the web server (`http://192.168.1.103/` as shown in the image).  Accessing the web server through a browser is a common first step in web application analysis.
+        *   **Why this step?** Accessing the web server via a browser allows you to interact with the web application and potentially reveal information about the CMS or web technologies in use through the website's front-end interface.
+    *   **Step 2: Examine the Website's Default Page or Front Page Content.** Observe the content displayed on the website's default page (often the root directory `/`). Look for visual cues, text, or branding that might indicate a specific CMS. The image shows a default page with text clearly identifying "Drupal".
+        *   **Why this step?** Many CMS platforms have distinctive default pages or branding elements that are visible on a fresh installation or when accessing the website's root directory. These visual cues can often quickly identify the CMS type.
+    *   **Step 3: Identify the CMS Based on Website Content.** Based on the visual cues and text on the website's page, identify the Content Management System (CMS) that is being used. In this case, the text "Drupal" clearly indicates that the CMS is Drupal.
+        *   **Why this step?** Correctly identifying the CMS is crucial for targeted vulnerability assessment, security analysis, and understanding the web application's technology stack.
     *   **Answer:** `Drupal`
-    *   **Why is this question relevant?**  Identifying the CMS installed on a web server is important for:
-        *   **Vulnerability Assessment:**  Knowing the CMS type and version allows you to research known vulnerabilities associated with that specific CMS. CMS platforms are frequent targets for attackers.
-        *   **Attack Surface Mapping:**  CMS platforms often have specific attack vectors and common vulnerabilities that attackers exploit.
-        *   **Configuration Review:**  CMS installations require specific configurations.  Reviewing the CMS configuration can reveal security misconfigurations.
+    *   **Relevance to Digital Forensics:**  Identifying the CMS installed on a web server is important for:
+        *   **Vulnerability Assessment and Security Auditing:** Knowing the specific CMS (like Drupal) and its version (see Question 20) allows for targeted research into known vulnerabilities and security weaknesses associated with that CMS. CMS platforms are frequently targeted by attackers, and specific versions often have documented vulnerabilities.
+        *   **Attack Surface Mapping and Threat Modeling:** CMS platforms have common attack vectors and known exploit techniques. Identifying the CMS helps map the potential attack surface and model potential threats specific to that CMS installation.
+        *   **Configuration Review and Security Misconfiguration Detection:** CMS installations often require specific configurations and security settings. Knowing the CMS type guides the review of its configuration for potential security misconfigurations, insecure settings, or deviations from security best practices.
 
-*   **Question 20:** What version of CMS is installed on the machine?
+---
+
+**Question 20: Determine the CMS Version**
+
+**Question:** What is the specific version of the Content Management System (CMS) that is installed on the web server?
+
 *   ![image](https://github.com/user-attachments/assets/2bcccaff-f88f-49fd-876c-78f8f234a9ec)
 
-    *   *(No explicit steps are provided in the original document for this question, and the image provided is the same as for Question 19)*.
-    *   **Inferred Step:** To determine the CMS version, you would typically need to:
-        *   **Examine CMS Files:**  Look for files within the web server's document root directory that contain version information.  For Drupal, this might be in files like `CHANGELOG.txt`, `README.txt`, or CMS-specific configuration files.
-        *   **Access CMS Admin Interface:**  Sometimes the CMS admin login page or the CMS's "About" section will display the version number.
-        *   **Use CMS Detection Tools:**  Tools like `whatweb` or online CMS detectors can attempt to automatically identify the CMS version by analyzing website headers, code patterns, and known CMS fingerprints.
-    *   **Answer:** *(The answer for the CMS version is missing from the original document. To answer this, further investigation of the Drupal installation would be needed)*
-    *   **Why is this question relevant?**  Knowing the *version* of the CMS is even more critical than just knowing the CMS type for:
-        *   **Vulnerability Identification:**  Vulnerabilities are often version-specific.  Knowing the exact version allows you to pinpoint known vulnerabilities that affect that particular CMS installation.
-        *   **Patching and Remediation:**  Version information is essential for applying the correct security patches and updates to address known vulnerabilities in the CMS.
-        *   **Exploit Research:**  Attackers often target known vulnerabilities in specific CMS versions. Version information is necessary for researching and understanding potential exploits.
+    *   *(No explicit steps are provided in the original document for this question, and the image provided is the same as for Question 19. The steps below are *inferred* based on common methods for CMS version detection)*.
+    *   **Step 1: Examine Website Source Code (View Page Source).** In a web browser, view the source code of the website's front page (right-click on the page and select "View Page Source" or similar option). Search within the HTML source code for meta tags, comments, or specific code patterns that might reveal the CMS version. CMS platforms sometimes embed version information in the HTML source.
+        *   **Why this step?** Website source code often contains metadata, comments, or code patterns that can reveal the CMS version or underlying technologies used to build the website.
+    *   **Step 2: Check for Version Files in the Web Directory (e.g., `CHANGELOG.txt`, `README.txt`).** If direct web browser access allows directory listing (which is a security misconfiguration in itself, but sometimes happens), or if you have access to the web server's file system (e.g., through the disk image), look for common version files within the CMS's document root directory. Files like `CHANGELOG.txt`, `README.txt`, `VERSION.txt`, or CMS-specific version files often contain version information.
+        *   **Why this step?** Many software applications, including CMS platforms, include version files (like `CHANGELOG.txt` or `README.txt`) in their installation directories that explicitly state the software version.
+    *   **Step 3: Access CMS Admin Interface and Look for "About" or "Version" Information.**  Try to access the CMS administration interface (often located at paths like `/admin`, `/administrator`, `/wp-admin` for WordPress, `/drupal/admin` for Drupal, etc., though these paths vary depending on the CMS and configuration). Once in the admin interface (if you have credentials or if it's publicly accessible, which is a security issue), look for an "About", "Version", or "System Information" section within the admin dashboard. CMS admin interfaces often display version information in these sections.
+        *   **Why this step?** CMS admin interfaces often provide system information and version details within their dashboards or "About" pages for administrative purposes.
+    *   **Step 4: Use CMS Detection Tools (e.g., `whatweb`, online CMS detectors).** Utilize automated CMS detection tools like `whatweb` (command-line tool) or online CMS version detectors. These tools analyze website headers, code patterns, and known CMS fingerprints to attempt to automatically identify the CMS type and version.
+        *   **Why this step?** Automated CMS detection tools can quickly and efficiently scan a website and attempt to fingerprint the CMS and its version, saving manual analysis time.
+    *   **Answer:** *(The answer for the CMS version is missing from the original document. To answer this, further investigation of the Drupal installation using the steps above would be needed. The version would be determined through one of these methods and then recorded)*.
+    *   **Relevance to Digital Forensics:** Knowing the *specific version* of the CMS is even more critical than just knowing the CMS type because:
+        *   **Version-Specific Vulnerability Identification:** Security vulnerabilities are often version-dependent. Knowing the *exact* CMS version allows for pinpointing known vulnerabilities that *specifically* affect that particular CMS installation. Vulnerability databases and security advisories are often indexed by software version.
+        *   **Targeted Exploit Research and Threat Assessment:** Attackers often target known vulnerabilities in specific CMS versions. Version information is essential for researching publicly available exploits, penetration testing tools, and understanding the immediate threats relevant to the identified CMS version.
+        *   **Patching and Remediation Prioritization:** Version information is crucial for applying the *correct* security patches and updates to address identified vulnerabilities. Patching is often version-specific. Knowing the version enables accurate patching and remediation efforts to secure the CMS installation.
 
-*   **Question 21:** Which port is listening to receive attack commands from the hacker?
-![image](https://github.com/user-attachments/assets/982a13d2-f376-4dfb-8e98-5991b0175482)
+---
 
-    *   *(No explicit steps are provided in the original document for this question, and the image is not directly helpful for answering it)*.
-    *   **Inferred Step:** To determine listening ports, you would typically use network tools on the compromised system (if it's live) or analyze system configuration files or memory dumps (if you have an image).  Common methods include:
-        *   **`netstat -tulnp` (Linux):**  This command lists listening ports and associated processes.  You would need to execute this command on the compromised system or analyze the output if it was captured.
-        *   **`ss -tulnp` (Linux):**  A more modern alternative to `netstat`.
-        *   **`tasklist /svc` and `netstat -ano` (Windows):**  Windows equivalents for listing processes and network connections.
-        *   **Analyzing Process List from Memory Dump:** If you have a memory dump, memory analysis tools can be used to list listening ports and associated processes.
-        *   **Configuration File Review:**  Sometimes configuration files for network services (e.g., SSH, web servers) will specify listening ports.
-    *   **Answer:** *(The answer for the listening port is missing from the original document.  To answer this, network analysis or system analysis tools would be needed to identify listening ports. The image provided is not directly relevant to this question.)*
-    *   **Why is this question relevant?**  Identifying listening ports, especially unusual or unexpected ports, is important for:
-        *   **Malware Detection:**  Malware often opens listening ports for command and control communication or to provide backdoor access.
-        *   **Unauthorized Services:**  Unnecessary or unauthorized services listening on open ports increase the attack surface.
-        *   **Network Security Assessment:**  Understanding listening ports helps to assess the system's network services and identify potential vulnerabilities.
+**Question 21: Determine Port Listening for Attack Commands**
 
-*   **Question 22:** What is the path to the root directory of the PHP user?
+**Question:** On which network port is the compromised system listening to receive attack commands from the hacker (e.g., for command and control communication)?
+
+*   ![image](https://github.com/user-attachments/assets/982a13d2-f376-4dfb-8e98-5991b0175482)
+
+    *   *(No explicit steps are provided in the original document for this question, and the image is not directly helpful for answering it. The steps below are *inferred* based on common methods for identifying listening ports)*.
+    *   **Step 1: Use Network Monitoring Tools (e.g., `netstat`, `ss`, `lsof`).** Utilize network monitoring commands on the compromised system (if it's live and accessible) or analyze the output of these commands if captured previously. Common Linux commands include:
+        *   `netstat -tulnp`: (Legacy command, but still widely used). Lists listening ports (`-l`), TCP and UDP ports (`-tu`), numerical ports (`-n`), and associated process IDs and program names (`-p`).
+        *   `ss -tulnp`: (More modern replacement for `netstat`). Provides similar functionality to `netstat` but is often faster and more feature-rich.
+        *   `lsof -i -n -P | grep LISTEN`: (List Open Files). Lists open files, including network sockets. `-i` filters for network files, `-n` numerical IPs, `-P` numerical ports, and `grep LISTEN` filters for listening sockets.
+        *   **Why this step?** These commands are standard Linux utilities for displaying network connection information, including listening ports, which are crucial for identifying services actively waiting for network connections.
+    *   **Step 2: Analyze Output for Listening Ports and Processes.** Examine the output of the network monitoring command. Look for lines that indicate ports in the "LISTEN" state.  Identify the port number and the process ID (PID) and program name associated with each listening port. Pay particular attention to ports that are:
+        *   Unusual or unexpected for a web server (e.g., ports outside of standard web server ports like 80, 443, 8080).
+        *   Associated with processes that seem suspicious or unknown.
+        *   Listening on TCP (TCP is more commonly used for command and control).
+        *   **Why this step?** Listening ports are the entry points through which network services and applications accept incoming network connections. Identifying listening ports helps pinpoint potential communication channels, including those used by attackers for command and control.
+    *   **Step 3: Correlate Listening Ports with Potential Malicious Activity.** Based on the identified listening ports, investigate further if any of them are:
+        *   Known ports used by malware or command and control frameworks.
+        *   Unexpected or undocumented for the system's intended function.
+        *   Listening on ports that are not typically required for a web server.
+        *   **Why this step?** Correlating listening ports with potential malicious activity helps distinguish legitimate services from potentially malicious backdoors or command and control channels. Unusual or unexpected listening ports are red flags that warrant deeper investigation.
+    *   **Answer:** *(The answer for the listening port is missing from the original document. To answer this, network analysis tools or examination of system configuration/process information would be needed to identify listening ports. The image provided is not directly relevant)*.
+    *   **Relevance to Digital Forensics:**  Identifying listening ports, especially unusual or unexpected ports, is important for:
+        *   **Malware Detection and Command and Control Identification:** Malware often opens listening ports to establish command and control (C2) channels, allowing attackers to remotely control the compromised system and send commands. Identifying unusual listening ports can reveal potential C2 communication channels.
+        *   **Unauthorized Service Detection:** Unnecessary or unauthorized services listening on open ports increase the attack surface of the system and can represent security vulnerabilities. Identifying these ports helps detect potential security misconfigurations or unauthorized software installations.
+        *   **Network Security Assessment:** Understanding the services listening on open ports is crucial for a comprehensive network security assessment. It helps map the system's network services and identify potential vulnerabilities associated with exposed ports and services.
+
+---
+
+**Question 22: Determine PHP User's Root Directory (Home Directory)**
+
+**Question:** What is the path to the root directory (home directory) of the `php` user account on the system?
+
 ![image](https://github.com/user-attachments/assets/5f8c99d3-8106-4f90-aa21-20f9b00aa569)
 
-    *   *(No explicit steps are provided in the original document for this question, and the image is not directly helpful for answering it)*.
-    *   **Inferred Step:** To find the home directory of the "php" user, you would typically consult the `/etc/passwd` file.  As mentioned in Question 15, the `/etc/passwd` file contains user account information.  The 6th field in each line of `/etc/passwd` is the home directory for that user.
-        *   **Extract `/etc/passwd` (if not already extracted):** Extract the `/etc/passwd` file from the `.ad1` image.
-        *   **Examine `/etc/passwd` for "php" user:**  Open the `/etc/passwd` file and look for the line for the user "php".
-        *   **Extract Home Directory Path:**  The 6th field in the "php" user's line will be the path to their home directory. The image seems to indicate the path is `/var/www`.
+*   **Step 1: Examine `/etc/passwd` File for "php" User Entry.** If you haven't already extracted `/etc/passwd` (as in Question 15), extract it from the `web-server-linux-003.ad1` disk image. Open the `/etc/passwd` file and search for the line corresponding to the user account named "php".
+        *   **Why this step?** The `/etc/passwd` file is the standard Linux system file that stores user account information, and it *includes* the home directory path for each user account. It's the most direct source for this information.
+    *   **Step 2: Extract Home Directory Path from `/etc/passwd` Entry.**  Once you locate the "php" user's entry in `/etc/passwd`, examine the 6th field of that line. In `/etc/passwd`, the 6th field is the "home directory" field. This field will contain the path to the home directory for the "php" user. The image seems to indicate the path is `/var/www`.
+        *   **Why this step?** The 6th field in `/etc/passwd` is specifically designated to store the user's home directory path. Extracting this field directly provides the answer to the question.
     *   **Answer:** `/var/www`
-    *   **Why is this question relevant?**  Knowing the home directory of a user, especially a system user like "php" (often associated with web servers), is useful for:
-        *   **File System Navigation:**  Knowing where to look for user-specific files, configuration, and data.
-        *   **Security Auditing:**  Auditing files and permissions within user home directories.
-        *   **Understanding Application Context:** For system users like "php", the home directory might be related to the web server's document root or application files.
+    *   **Relevance to Digital Forensics:**  Knowing the home directory path of a user, especially a system user like "php" (often associated with web servers), is useful for:
+        *   **File System Navigation and Evidence Location:** Knowing the home directory path is essential for navigating the file system within the disk image and locating user-specific files, configuration data, user-created content, and potential evidence related to user activity.
+        *   **Security Auditing and Configuration Review:** Auditing the contents and permissions of user home directories, particularly for system users or service accounts, can help identify security misconfigurations, unauthorized file modifications, or suspicious files placed in user directories.
+        *   **Understanding Application Context and Data Storage:** For system users like "php" that are associated with web servers, the home directory might be related to the web server's document root directory, application files, or configuration files. Knowing the home directory provides context for understanding the user account's role and potential data storage locations.
 
 
 
