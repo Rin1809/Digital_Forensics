@@ -92,7 +92,7 @@ Now we can proceed to answer the specific questions based on this decoded ASCII 
 **Question:** Based on the provided information and log analysis context, what method did the attacker likely use to attempt to compromise the system?
 
 ![image](https://github.com/user-attachments/assets/9b227fe3-e5d0-47a6-ba85-216a2f8b1d7a)
-![image](https://github.com/user-attachments/assets/c8aebcf7-a761-4bfe-b2a9-7b0a84a3609f)
+
 
 **Steps:**
 
@@ -124,7 +124,7 @@ Now we can proceed to answer the specific questions based on this decoded ASCII 
 
 Based on classifying these IP addresses, they appear to be targets of brute force, based on the high number of login attempts associated with them (limited to the April attack period).
 
-*(The list of IPs and attempt counts is provided in the original document - no image is needed here)*
+![image](https://github.com/user-attachments/assets/c8aebcf7-a761-4bfe-b2a9-7b0a84a3609f)
 
 **Steps:**
 
