@@ -707,6 +707,285 @@ Go into root's history to see. Here there is an `rm` command, it removes file `3
 
 
 
+
+
+## Question 23: What is the SHA256 hash value of the RAM Dump file?
+
+**Question:** What is the SHA256 hash value of the RAM Dump file?
+
+![image](https://github.com/user-attachments/assets/1e898190-7ec8-41b9-8d4a-1e424d006535)
+
+**Steps:**
+
+1.  **Use PowerShell to Calculate SHA256 Hash.**  Open PowerShell on a Windows system where the RAM dump file is accessible. Use the `Get-FileHash` cmdlet with the `-Algorithm SHA256` parameter to calculate the SHA256 hash of the RAM dump file. The command would be: `Get-FileHash -Algorithm SHA256 -Path "path\to\your\RAM_Dump_File.mem"`.  *(Replace `"path\to\your\RAM_Dump_File.mem"` with the actual path to your RAM dump file, e.g., `"E:\Dieu_tra_so\Lab4-Resource\Windows_RAM.mem"` or `"/root/Win10Home-20H2-64bit.mem"` as used in other questions)*.
+    *   **Rationale:** Calculating the SHA256 hash provides a unique digital fingerprint of the RAM dump file.  **Why is this important?**
+        *   **Data Integrity Verification:** The SHA256 hash is a more robust cryptographic hash compared to MD5.  It's crucial for verifying the integrity of the RAM dump file throughout the analysis process.  If the SHA256 hash is recalculated later and matches the original hash, it confirms that the file has not been altered or corrupted.
+        *   **Chain of Custody:** Recording the SHA256 hash is essential for maintaining the chain of custody of the digital evidence.  It provides verifiable proof that the analyzed file is the original, unaltered RAM dump collected as evidence.
+        *   **Uniqueness Identification:** The SHA256 hash uniquely identifies this specific RAM dump file.  It can be used to differentiate it from other memory captures and for record-keeping purposes.
+
+**Answer (SHA256 Hash):** *(The SHA256 hash value will be displayed in the PowerShell output after running the command. This value should be recorded in investigation notes)*
+
+**Relevance to Digital Forensics:**  Calculating the SHA256 hash of the RAM dump is a foundational step for ensuring data integrity and maintaining chain of custody, critical aspects of any digital forensics investigation.
+
+---
+
+## Question 24: When was the RAM Dump file collected according to the system time?
+
+**Question:** When was the RAM Dump file collected according to the system time?
+
+![image](https://github.com/user-attachments/assets/f73fdaca-2a95-4955-a527-b4d01d5e9d87)
+![image](https://github.com/user-attachments/assets/7eae0a0a-cf88-4432-aa39-4283f70a4ac2)
+
+**Steps:**
+
+1.  **Use Volatility `windows.info` Plugin.** Execute the Volatility framework with the `windows.info` plugin to extract system information from the RAM dump file. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.info`.  *(Adjust the path to the RAM dump file if necessary)*.
+    *   **Rationale:** The `windows.info` plugin in Volatility is specifically designed to extract general system information from a Windows memory dump, including the system time at the moment the memory dump was created.
+2.  **Examine the "SystemTime" Section in Volatility Output.**  Carefully review the output of the `windows.info` plugin. Look for the section labeled "SystemTime". This section contains the system date and time as recorded in the memory dump.
+    *   **Rationale:** The "SystemTime" field in the `windows.info` plugin output directly provides the timestamp of when the RAM dump was acquired, according to the captured system's clock. This is crucial for establishing a timeline and understanding the context of the memory capture.
+
+**Answer (Collection Time):** *(The "SystemTime" value displayed in the Volatility output, as shown in the image, e.g., `2024-08-09 17:48:34 UTC+0000`)*
+
+**Relevance to Digital Forensics:**  Knowing the RAM dump collection time is essential for:
+
+*   **Timeline Creation and Event Correlation:** The collection timestamp provides a crucial anchor point for building a timeline of events. All information extracted from the RAM dump is relative to this point in time. It allows for correlating memory artifacts with other events from system logs or network captures that occur around the same time.
+*   **Incident Contextualization:** The collection time provides context for the state of the system at a specific moment. It helps understand what processes were running, what network connections were active, and what data was present in memory *at that particular time*.
+*   **Time Zone Awareness:** The `windows.info` plugin also often displays the timezone of the captured system.  This is critical for accurate interpretation of timestamps and for correlating events across systems in different timezones (as seen in Question 13).
+
+---
+
+## Question 25: Determine the PID of the "brave.exe" process
+
+**Question:** Determine the PID of the "brave.exe" process in the RAM Dump file above.
+
+![image](https://github.com/user-attachments/assets/3115a0ed-fb03-455f-8c4c-de60a4febea4)
+
+**Steps:**
+
+1.  **Use Volatility `windows.pslist` Plugin with `grep`.** Execute the Volatility framework with the `windows.pslist` plugin to list running processes from the RAM dump.  Use `grep` to filter the output and specifically search for processes named "brave.exe". The command is:  `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.pslist | grep brave.exe`. *(Adjust the path to the RAM dump file if necessary)*.
+    *   **Rationale:** The `windows.pslist` plugin in Volatility is designed to list running processes from a Windows memory dump, similar to Task Manager or `pslist.exe`.  Using `grep brave.exe` efficiently filters this list, directly targeting the process we are interested in.
+2.  **Examine `grep` Output for PID.** Review the output of the command. The `grep` command will display lines from `windows.pslist` output that contain "brave.exe". The PID (Process ID) is typically the first numerical value listed on each line in the `windows.pslist` output.  The example shows the PID as `4856`.
+    *   **Rationale:** The `windows.pslist` plugin provides process information in a structured format. The PID is a key identifier for each process, allowing for targeted analysis of specific processes in subsequent steps.
+
+**Answer (PID of brave.exe):** `4856`
+
+**Relevance to Digital Forensics:** Identifying the PID of a specific process like "brave.exe" is important because:
+
+*   **Process Identification and Tracking:** The PID uniquely identifies a specific instance of the `brave.exe` process that was running at the time of the memory dump. This allows you to track and analyze this particular process throughout the RAM dump analysis.
+*   **Targeted Process Analysis:** Knowing the PID enables you to use other Volatility plugins to perform more targeted analysis on this specific process, such as:
+    *   Dumping its memory (`memdump` plugin).
+    *   Examining its command line (`cmdline` plugin).
+    *   Listing its open files (`handles` or `filescan` plugins).
+    *   Analyzing its network connections (`netscan` plugin - as seen in the next question).
+*   **Behavioral Analysis:** Analyzing a specific process like a browser (brave.exe) can reveal user browsing history, web activity, potentially accessed websites, and other browser-related artifacts present in memory.
+
+---
+
+## Question 26: How many network connections were established at the time the RAM Dump file was collected?
+
+**Question:** How many network connections were established at the time the RAM Dump file was collected? (enter only the number)
+
+![image](https://github.com/user-attachments/assets/8d32bac1-b8b1-42c4-8019-8fe29a1efebf)
+![image](https://github.com/user-attachments/assets/31f7e4c9-012e-49c0-b215-df923f5dfdb7)
+![image](https://github.com/user-attachments/assets/4b6a8297-2e57-46a8-9d55-8ef8ce42395c)
+
+**Steps:**
+
+1.  **Use Volatility `netscan` Plugin.** Execute the Volatility framework with the `netscan` plugin to scan for and list network connection objects found in the RAM dump. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem netscan`. *(Adjust the path to the RAM dump file if necessary)*.
+    *   **Rationale:** The `netscan` plugin in Volatility is specifically designed to scan memory and identify network-related objects, including information about active and recently closed network connections.
+2.  **Examine `netscan` Output for "Established" Connections.** Review the output of the `netscan` plugin. Look for entries where the "State" column indicates "Established". These entries represent network connections that were actively established at the time the RAM dump was captured.
+    *   **Rationale:** "Established" connections are those that were actively open and communicating at the moment the memory dump was taken. These are often of high forensic interest as they represent active network communication at the time of capture.
+3.  **Count the Number of "Established" Connections.** Count the number of lines in the `netscan` output that have the "State" as "Established". The example shows a total of `08` established connections.
+    *   **Rationale:** Counting the established connections provides a quantifiable measure of the network activity at the time of the memory capture. This number can be used for reporting and for comparing network activity across different time points or systems.
+
+**Answer (Number of Established Connections):** `08`
+
+**Relevance to Digital Forensics:**  Determining the number of established network connections at the time of the RAM dump is important because:
+
+*   **Network Activity Assessment:** It provides a snapshot of the network communication activity at the moment of capture. A high number of established connections, or connections to unusual or suspicious IPs, can indicate network-intensive applications running, potential data exfiltration, or command and control communication.
+*   **Malware Detection (Network Indicators):** Malware often establishes network connections for communication with command-and-control servers or for spreading to other systems. Identifying and analyzing established connections can reveal network-based indicators of compromise (IOCs).
+*   **Process-to-Network Mapping (with further analysis):** While `netscan` provides connection information, you can correlate this with process information (e.g., using `windows.netstat` or further `netscan` analysis with process filtering - see next question) to determine which processes were responsible for establishing those connections. This process-to-network mapping is crucial for understanding application behavior and identifying potentially malicious processes engaging in network communication.
+
+---
+
+## Question 27: Chrome has an established network connection with which FQDN domain name?
+
+**Question:** Chrome has an established network connection with which FQDN domain name?
+
+![image](https://github.com/user-attachments/assets/788cf100-3ea1-4c5c-85c7-e26266961763)
+![image](https://github.com/user-attachments/assets/2957b98b-3438-4f1a-9b14-cda93535a07d)
+![image](https://github.com/user-attachments/assets/44f138e1-59b2-4e31-a0a8-f1cf095f2cc1)
+
+**Steps:**
+
+1.  **Use Volatility `netscan` Plugin with `grep chrome.exe`.** Execute the Volatility framework again with the `netscan` plugin, but this time, add `grep chrome.exe` to filter the output and specifically focus on network connections associated with the "chrome.exe" process. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem netscan | grep chrome.exe`. *(Adjust the path to the RAM dump file if necessary)*.
+    *   **Rationale:** Filtering `netscan` output by `grep chrome.exe` isolates the network connections established by the Chrome browser process. This allows us to focus specifically on Chrome's network activity at the time of the memory capture.
+2.  **Identify Established Connection for Chrome and Foreign IP.** Examine the filtered `netscan` output. Look for a line where the "Process" column shows "chrome.exe" and the "State" column is "Established".  Identify the "ForeignIP" address associated with this established Chrome connection.  The example shows one established connection for chrome.exe, and you need to retrieve its ForeignIP.
+    *   **Rationale:** Focusing on "Established" connections for "chrome.exe" pinpoints the active network connection initiated by Chrome at the time of the memory capture. The "ForeignIP" is the remote IP address Chrome was connected to.
+3.  **Use `nslookup` to Resolve Foreign IP to FQDN.**  Take the "ForeignIP" address identified in the previous step. Use the `nslookup` command (or an online DNS lookup tool) to perform a DNS reverse lookup and resolve the IP address to a Fully Qualified Domain Name (FQDN). The command is: `nslookup <ForeignIP>`.  *(Replace `<ForeignIP>` with the actual IP address from the `netscan` output)*. The example uses `nslookup` and resolves the IP to `...protonmail.ch`.
+    *   **Rationale:** While IP addresses are useful, domain names (FQDNs) are often more informative and human-readable. Resolving the IP to a domain name can provide context about the remote server Chrome was connected to.  Domain names can reveal the service or organization Chrome was communicating with (e.g., `protonmail.ch` indicates communication with ProtonMail).
+
+**Answer (FQDN Domain Name):** `protonmail.ch`
+
+**Relevance to Digital Forensics:** Determining the FQDN domain name associated with Chrome's established network connection is important because:
+
+*   **Browsing Activity Context:** It provides context about Chrome's network activity.  Knowing the domain name reveals *what* website or service the user was likely interacting with using Chrome at the time of the memory capture.  In this case, `protonmail.ch` suggests the user was accessing the ProtonMail secure email service.
+*   **Potential Evidence of User Actions:**  Browsing history, webmail access, or other online activities performed within Chrome and directed towards specific domain names can be relevant evidence in an investigation, depending on the nature of the case.
+*   **Identifying Communication Partners:**  Domain names can help identify the remote entities or organizations the user was communicating with or accessing through Chrome. This can be crucial for understanding communication patterns and potential relationships in an investigation.
+
+---
+
+## Question 28: What is the MD5 hash value of the executable file with PID 6988?
+
+**Question:** What is the MD5 hash value of the executable file with PID 6988?
+
+![image](https://github.com/user-attachments/assets/8f6af695-3f6c-406e-ae6c-89402120a3b6)
+![image](https://github.com/user-attachments/assets/0020f8a2-e5b2-43a0-9140-c4f6cbcad602)
+
+**Steps:**
+
+1.  **Use Volatility `windows.cmdline` Plugin to Identify Executable Name.** Execute the Volatility framework with the `windows.cmdline` plugin and specify the PID `6988` to retrieve the command line used to start the process with that PID. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.cmdline --pid 6988`. *(Adjust the path to the RAM dump file if necessary)*.
+    *   **Rationale:** The `windows.cmdline` plugin in Volatility retrieves the command line string used to launch a process.  This command line typically includes the full path and name of the executable file that started the process. This step is necessary to determine *which* executable file is associated with PID 6988 before we can calculate its hash.
+2.  **Examine `windows.cmdline` Output to Get Executable Name.** Review the output of the `windows.cmdline` command. The output will show the command line string for PID 6988. In the example, the command line reveals that the executable is `"C:\Users\user1\AppData\Local\Microsoft\OneDrive\OneDrive.exe"`. From this, we can extract the executable name as `OneDrive.exe`.
+    *   **Rationale:**  The command line output provides the full path to the executable file.  Extracting the executable name (e.g., `OneDrive.exe`) allows us to then calculate the hash of *that specific executable file*.
+3.  **Calculate MD5 Hash of `OneDrive.exe` (on a Clean System).**  Since we know the executable name is `OneDrive.exe`, and assuming it's a legitimate Windows file, you can calculate the MD5 hash of a *known clean copy* of `OneDrive.exe`.  **Important:** Do *not* calculate the hash directly from the RAM dump. Calculate it from a known good file on a clean Windows system to get a baseline hash for comparison.  Use PowerShell or a similar tool to calculate the MD5 hash. The example shows using PowerShell: `Get-FileHash -Algorithm MD5 -Path "C:\Path\to\Clean\OneDrive.exe"`. *(Replace `"C:\Path\to\Clean\OneDrive.exe"` with the actual path to a clean copy of `OneDrive.exe`)*.
+    *   **Rationale:** Calculating the MD5 hash of a *known clean copy* of `OneDrive.exe` provides a baseline or reference hash value for comparison.  This baseline hash can then be compared to the hash of `OneDrive.exe` potentially extracted from the RAM dump (although this task doesn't explicitly ask for extraction from the RAM dump, it's a common next step in malware analysis).  Comparing the hashes can help determine if the `OneDrive.exe` process in the RAM dump is legitimate or potentially modified or malicious (if its hash differs from the known good hash).
+
+**Answer (MD5 Hash of OneDrive.exe):** *(The MD5 hash value of `OneDrive.exe` calculated from a clean system will be displayed in the PowerShell output. This value should be recorded in investigation notes)*
+
+**Relevance to Digital Forensics:**  Determining the MD5 hash of an executable file associated with a PID from a RAM dump is important for:
+
+*   **Executable Identification and Verification:**  By getting the executable name and calculating its hash, you can identify the specific program that was running with PID 6988. Comparing the hash to known good hashes (from a clean system or malware databases) can help verify if the executable is legitimate or potentially malicious.
+*   **Malware Analysis and Threat Intelligence:** If the MD5 hash of `OneDrive.exe` (or any executable) differs from the known good hash, it could indicate that the file has been modified, potentially by malware or an attacker.  This hash can then be used to:
+    *   Search malware databases (like VirusTotal) to see if the hash is associated with known malware.
+    *   Further analyze the executable file (if extracted from memory or disk) for malicious functionality.
+*   **Process Legitimacy Assessment:**  Hashing executables helps assess the legitimacy of processes running in memory.  Unexpected or modified system executables are often indicators of compromise.
+
+---
+
+## Question 29: What is the content starting at offset 0x45BE876 with a length of 6 bytes?
+
+**Question:** What is the content starting at offset 0x45BE876 with a length of 6 bytes?
+
+![image](https://github.com/user-attachments/assets/a096ba0b-999d-4f84-baa3-77129a132a0e)
+
+**Steps:**
+
+1.  **Open RAM Dump File in a Hex Editor.** Use a hex editor software (like Hex Workshop, HxD, or others) to open the RAM dump file (`Win10Home-20H2-64bit.mem` or `Windows_RAM.mem`).
+    *   **Rationale:** Hex editors allow you to view and examine the raw binary data of a file at the byte level. This is essential for inspecting specific memory locations defined by offsets.
+2.  **Navigate to the Specified Offset.** In the hex editor, use the "Go To Offset" or similar function to navigate to the memory address `0x45BE876`. Enter this hexadecimal offset value into the hex editor's navigation tool.
+    *   **Rationale:** Offsets are used to pinpoint specific locations within a file or memory region. Navigating to the specified offset allows you to examine the data starting at that exact memory address.
+3.  **Select and Examine 6 Bytes of Data Starting at the Offset.**  Once you are at offset `0x45BE876` in the hex editor, select the next 6 bytes of data *starting from* that offset.  The hex editor will display the hexadecimal representation of these 6 bytes. The example shows the 6 bytes as `68 61 61 ...` and the ASCII interpretation starting with "haa...".
+    *   **Rationale:** The question specifies a length of 6 bytes. Selecting and examining these bytes allows you to read the raw data at that memory location and interpret it as ASCII or other encodings, as needed.
+4.  **Interpret the Hex Data (Optional).**  Optionally, interpret the hexadecimal bytes as ASCII text to see if they represent human-readable characters. The example shows that the 6 bytes, when interpreted as ASCII, start with the word "hacker".
+    *   **Rationale:** Interpreting hex data as ASCII or other character encodings can reveal meaningful strings or text embedded within the raw binary data. In this case, finding "hacker" could be a relevant keyword or indicator within the memory dump.
+
+**Answer (Content at Offset 0x45BE876):** `68 61 61 ...` (Hexadecimal representation of the 6 bytes) and starting with the word "hacker" (ASCII interpretation)
+
+**Relevance to Digital Forensics:**  Examining specific offsets and byte sequences in a RAM dump using a hex editor is important for:
+
+*   **Keyword Searching and String Extraction (Manual):** While automated string extraction tools exist (like the `strings` command), manually examining offsets in a hex editor can be useful for:
+    *   Verifying automated string extraction results.
+    *   Finding strings or data patterns that might not be easily found by automated tools.
+    *   Examining data in context, surrounding bytes, and memory structures.
+*   **Malware Signature and Pattern Analysis:** Malware often has specific byte patterns or strings embedded within its code or data sections. Hex editor analysis can help locate these patterns, which can be used to:
+    *   Identify malware signatures manually.
+    *   Understand malware behavior and functionality by examining its data structures.
+*   **Data Carving and Recovery (Manual):** In some cases, hex editor analysis can be used to manually carve or recover data fragments from memory or disk images, especially if automated carving tools fail or for very specific data recovery tasks.
+
+---
+
+## Question 30: What is the creation date and time of the parent process of "powershell.exe"?
+
+**Question:** What is the creation date and time of the parent process of "powershell.exe"?
+
+![image](https://github.com/user-attachments/assets/ecd409b6-e5fa-455b-bbab-52160aca2f00)
+![image](https://github.com/user-attachments/assets/b9bf75a1-a52d-41ea-996d-8ec868d98b81)
+![image](https://github.com/user-attachments/assets/721efccc-13c7-4eb8-a44e-480040551124)
+
+**Steps:**
+
+1.  **Use Volatility `windows.pstree` Plugin with `grep powershell.exe` to Find Parent PID (PPID).** Execute the Volatility framework with the `windows.pstree` plugin to display a process tree of running processes from the RAM dump. Use `grep powershell.exe` to filter the output and specifically find the "powershell.exe" process and its parent process. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.pstree | grep powershell.exe`. *(Adjust the path to the RAM dump file if necessary)*.
+    *   **Rationale:** The `windows.pstree` plugin in Volatility visualizes the parent-child relationships between processes, making it easy to identify the parent process (PPID) of a given process (like `powershell.exe`).
+2.  **Examine `windows.pstree` Output for PPID.** Review the output of the command. The `grep` output will show the line for "powershell.exe" and its parent process.  Note the PPID (Parent Process ID) listed for "powershell.exe".  The example shows the PPID as `4352`.
+    *   **Rationale:** The `windows.pstree` output provides the PPID, which is the Process ID of the parent process that launched `powershell.exe`.  Knowing the PPID is crucial for finding information about the parent process itself.
+3.  **Use Volatility `windows.cmdline` Plugin with Parent PID to Identify Parent Process Name.** Execute Volatility again with the `windows.cmdline` plugin, but this time, use the PPID `4352` (identified in the previous step) to find the command line and executable name of the parent process. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.cmdline --pid 4352`.
+    *   **Rationale:**  Using the `windows.cmdline` plugin with the PPID allows us to determine *which* process is the parent of "powershell.exe". The command line output will reveal the executable name of the parent process. The example shows the parent process is `explorer.exe`.
+4.  **Use Volatility `windows.pslist` Plugin with Parent PID to Get Creation Time.** Execute Volatility one more time with the `windows.pslist` plugin and use `grep 4352` to filter for information about the process with PID `4352` (the parent process, `explorer.exe`). The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.pslist | grep 4352`.
+    *   **Rationale:** The `windows.pslist` plugin provides process listing information, including the "Create Time" of each process.  By filtering for the parent process's PID (`4352`), we can retrieve the creation date and time of the parent process (`explorer.exe`).
+5.  **Examine `windows.pslist` Output for Creation Time of Parent Process.** Review the output of the `windows.pslist` command. Look for the "Create Time" column for the process with PID `4352` (`explorer.exe`). This timestamp represents the creation date and time of the parent process.
+    *   **Rationale:** The "Create Time" from `windows.pslist` for the parent process directly answers the question: what is the creation date and time of the parent process of "powershell.exe"?
+
+**Answer (Creation Date and Time of Parent Process):** *(The "Create Time" value for `explorer.exe` with PID 4352, as displayed in the Volatility `windows.pslist` output, e.g., `2024-08-09 17:48:29 UTC+0000`)*
+
+**Relevance to Digital Forensics:**  Determining the parent process and its creation time for "powershell.exe" is important because:
+
+*   **Process Provenance and Context:** Understanding the parent-child process relationship helps establish the provenance and context of "powershell.exe". Knowing that "explorer.exe" (the Windows Explorer shell) is the parent process is generally normal and expected. However, if the parent process were something unusual or suspicious, it could indicate malicious process injection or an unusual process execution chain.
+*   **Timeline Reconstruction and Event Sequencing:** The creation time of the parent process (`explorer.exe`) and its relationship to "powershell.exe" helps build a more detailed timeline of process execution events. It allows you to sequence events and understand the order in which processes were started.
+*   **Detecting Process Injection or Anomalous Process Trees:** In cases of malware or malicious activity, "powershell.exe" might be launched by a suspicious or unexpected parent process, not `explorer.exe`. Analyzing process trees and parent-child relationships can help detect process injection, malicious process spawning, and other anomalous process execution patterns.
+
+---
+
+## Question 31: What is the full path and name of the last file opened in notepad?
+
+**Question:** What is the full path and name of the last file opened in notepad?
+
+![image](https://github.com/user-attachments/assets/f6fdc8a8-db18-4ef3-a027-66d867fca6d8)
+![image](https://github.com/user-attachments/assets/ed619ec1-f351-44c5-9a9e-7ea08115ae52)
+
+**Steps:**
+
+1.  **Use Volatility `windows.pslist` Plugin with `grep notepad.exe` to Find Notepad PID.** Execute the Volatility framework with the `windows.pslist` plugin and use `grep notepad.exe` to filter for information about the "notepad.exe" process. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.pslist | grep notepad.exe`. *(Adjust the path to the RAM dump file if necessary)*.
+    *   **Rationale:**  Similar to Question 25, using `windows.pslist` and filtering for "notepad.exe" helps identify the PID of the notepad process, which is needed for the next step.
+2.  **Examine `windows.pslist` Output for Notepad PID.** Review the output and note the PID for "notepad.exe". The example shows the PID as `2520`.
+    *   **Rationale:**  Knowing the PID of notepad allows us to target further Volatility plugins to retrieve information *specific* to this notepad process instance.
+3.  **Use Volatility `windows.cmdline` Plugin with Notepad PID to Get Command Line.** Execute Volatility again with the `windows.cmdline` plugin and use the notepad PID `2520` to retrieve the command line used to start notepad. The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.cmdline --pid 2520`.
+    *   **Rationale:** The `windows.cmdline` plugin, when used with a specific PID, retrieves the command line string used to launch that process. For notepad, the command line *sometimes* (but not always, depending on how notepad is launched and what arguments are passed) includes the path to the file that was opened when notepad started.
+4.  **Examine `windows.cmdline` Output for File Path.** Review the `windows.cmdline` output for PID `2520`. Look at the command line string. If notepad was launched by opening a file, the full path and name of the opened file might be present in the command line arguments. In the example, the command line shows: `"C:\WINDOWS\system32\notepad.exe C:\Users\user1\Documents\Lab_4_strings_keywords.txt"`. This indicates that "C:\Users\user1\Documents\Lab_4_strings_keywords.txt" was opened in notepad.
+    *   **Rationale:** Analyzing the command line of notepad is a *potential* way to find the last opened file, *if* the file path is passed as a command-line argument when notepad is launched. Note that this method is not always reliable as the file path might not always be included in the command line. More robust methods for finding recently opened files would involve analyzing registry keys, jump lists, or file system metadata.
+
+**Answer (Full Path and Name of Last Opened File in Notepad):** `C:\Users\user1\Documents\Lab_4_strings_keywords.txt`
+
+**Relevance to Digital Forensics:**  Determining the last file opened in notepad (or other text editors) can be useful for:
+
+*   **User Activity Tracking:**  It provides insight into what documents or files the user was recently viewing or working with using notepad. This can be relevant for understanding user actions and potential files of interest in an investigation.
+*   **Document Context and Content Discovery:**  Knowing the name and path of the last opened file can lead to the discovery of potentially relevant documents or text files on the system.  The file name itself (`Lab_4_strings_keywords.txt` in this example) might even be suggestive of its content or purpose.
+*   **Limited Evidence - Command Line Dependency:** It's important to remember that relying solely on the command line to find the last opened file in notepad is limited. It depends on whether the file path was included in the command line when notepad was launched. Other methods, like registry analysis, are generally more reliable for tracking recently opened files.
+
+---
+
+## Question 32: How long did the suspect use the Brave browser?
+
+**Question:** How long did the suspect use the Brave browser?
+
+![image](https://github.com/user-attachments/assets/59475ec1-6ad8-4294-8a2b-21e2b31449e6)
+
+**Steps:**
+
+1.  **Use Volatility `windows.pslist` Plugin with `grep brave.exe` to Get Create Time and Exit Time.** Execute the Volatility framework with the `windows.pslist` plugin and filter for "brave.exe" using `grep` (as in Question 25). The command is: `python3 vol.py -f /root/Win10Home-20H2-64bit.mem windows.pslist | grep brave.exe`.
+    *   **Rationale:** The `windows.pslist` plugin provides process listing information, including the "Create Time" (when the process started) and "Exit Time" (when the process terminated, if it had exited at the time of memory capture).
+2.  **Examine `windows.pslist` Output for Create Time and Exit Time.** Review the output of the command and note the "Create Time" and "Exit Time" values for the "brave.exe" process. The example shows a Create Time and an Exit Time.
+    *   **Rationale:** These timestamps from `windows.pslist` provide the start and end times of the Brave browser process's execution, as recorded in the memory dump.
+3.  **Calculate the Time Difference.** Subtract the "Create Time" from the "Exit Time" to calculate the duration for which the Brave browser was running. Perform the time subtraction manually or using a time calculation tool. The example shows the calculation: `17:50:56 - 17:48:45 = 00:02:11`.
+    *   **Rationale:** Subtracting the start time from the end time gives the elapsed time, which represents the duration for which the Brave browser process was active. This duration can provide insights into user browsing session length.
+
+**Answer (Duration of Brave Browser Usage):** `02:11` (2 minutes 11 seconds)
+
+**Relevance to Digital Forensics:**  Determining the duration of browser usage (like Brave browser in this case) can be useful for:
+
+*   **User Activity Timeline and Session Analysis:**  Knowing how long a browser was active can contribute to building a timeline of user activity. Browser usage duration can indicate how long a user was engaged in web browsing or online activities.
+*   **Contextualizing Browser History and Web Activity:**  Combining browser usage duration with browser history analysis (if browser history artifacts are recovered from memory or disk) can provide a more complete picture of the user's web browsing session, including the timing and duration of website visits.
+*   **Incident Reconstruction and Activity Mapping:** In incident response scenarios, browser usage duration can help reconstruct the attacker's or user's actions leading up to or during an incident, particularly if web browsing activity is relevant to the investigation.
+
+
+
+
+
+
+
+
+
+
+
 # Task 1: Create a DD-format Image File
 
 **Objective:** Create a bit-by-bit copy (a "forensic image") of a drive using the `dd` command. This is a **crucial first step** in any digital forensics investigation.  The `dd` command, a standard tool in Linux and other Unix-like systems, is used for low-level data copying. By creating an exact copy, we ensure that all data, including deleted files and unallocated space, is preserved.  This allows examiners to analyze the evidence without risking alteration or damage to the original source. We will use the "dd" format as it's a raw, uncompressed format widely compatible with forensic tools.
