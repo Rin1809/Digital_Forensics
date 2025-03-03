@@ -73,6 +73,7 @@ Samba Configuration
 
 
 *   Checked the Kali Linux machine.
+
 ![image](https://github.com/user-attachments/assets/e2dc0d45-1e38-4fb8-b925-f24515a7ea3c)
 
 
@@ -95,7 +96,7 @@ Samba Configuration
 ![image](https://github.com/user-attachments/assets/d7115474-e47a-4cb7-a6df-e4c8994cd6c2)
 
 *   Converted the E01 file using `xmount` and mounted it in the same directory as the .E01 file.
-![image](https://github.com/user-attachments/assets/47e3c890-d12e-43da-a6af-d95cbeadf69a)
+
 
 ![image](https://github.com/user-attachments/assets/f37c4d3b-473a-4f40-9931-94563d54f090)
 
@@ -122,15 +123,18 @@ Samba Configuration
 ![image](https://github.com/user-attachments/assets/656a2f4d-c805-4a15-a4b0-fe1e144e4be9)
 
 *   Mounted the DD image file containing an Apple File System (APFS).
+
 ![image](https://github.com/user-attachments/assets/4e46772b-c242-424f-8853-73d9af7e9948)
 
 *   The path to calculate the MD5 hash of `.fseventsd` is…
+
 ![image](https://github.com/user-attachments/assets/34056b0c-840f-443b-90ad-b622278c7ed0)
 
 ![image](https://github.com/user-attachments/assets/97d5345e-a02a-4545-8499-223868d0a24f)
 
 
 *   Continued to use the above command to calculate hashes and save them to the text file.
+
 ![image](https://github.com/user-attachments/assets/0d503e45-7bfe-4698-b432-7adaf70c0a19)
 
 
@@ -166,10 +170,13 @@ Samba Configuration
 
 
 *   Browsed the home directory of user "roger" and then navigated to the "Downloads" directory.
+
 ![image](https://github.com/user-attachments/assets/6635d2c1-7026-4636-864b-2a423f3e0664)
 
 
+
 *  `phan_tich_image_pro_max.py` (Image_Analysis_Pro_Max.py)
+
 ![image](https://github.com/user-attachments/assets/5eb9c477-a010-4fdc-a3e7-28a8164d465f)
 
 *   Added `host='0.0.0.0'` to allow access from other machines (the physical machine).
@@ -217,9 +224,13 @@ Samba Configuration
 Other Entries:
 
 *   **5: Root Directory:** The root directory of the file system, typically represented as "C:\" in Windows.  Contains entries for all files and directories at the top level of the volume.
+
+
 ![image](https://github.com/user-attachments/assets/7fd3144f-78cc-4713-92e6-ab5c8f9d0aed)
 
 *   **6: Volume Bitmap:** A special metadata file that tracks the allocation of clusters on the volume. Each bit in the bitmap corresponds to a cluster, with a value of 0 indicating a free cluster and 1 indicating an allocated cluster.
+
+
 ![image](https://github.com/user-attachments/assets/ef402b42-d095-4b97-a1e2-85c3c97fa6ed)
 
 *   **9: $Secure:** A metadata file containing security information for files and directories on the volume. It defines access control lists (ACLs) to determine which users or groups have permission to access a specific file or directory.
@@ -253,6 +264,8 @@ Write temporal data to the file `ado.txt`.
 
 
 Create the file `task4_timeline.txt` using `ado.txt` to view a timeline of activities performed on the suspect's machine from the Linux image.
+
+
 ![image](https://github.com/user-attachments/assets/83587142-b8d2-4937-9243-d461d52cccb6)
 
 
@@ -262,6 +275,8 @@ The timeline shows the initial creation of NTFS file system metadata ($MFT, $MFT
 
 
 Subsequent activities show access and modification of these directories at various times, such as accessing the `Outlook Files` directory at Thu Dec 19 2019 18:46:00.
+
+
 ![image](https://github.com/user-attachments/assets/2cf933d3-7885-46f3-91f5-27ba3984a42c)
 
 
@@ -390,13 +405,18 @@ Handles are pointers to system objects such as files, registry keys, processes, 
 
 3.  Memory Sections:
 
-    *   Based on the results of the "Hierarchical Processes" section, we see that the `spoolsv.exe` process (PID = 856) has been compromised, leading to the creation of child processes `rundll32.exe` and `cmd.exe`. The `notepad.exe` and `calc.exe` processes were then executed from `cmd.exe`. We can observe what they did through memory sections.
+   *   Based on the results of the "Hierarchical Processes" section, we see that the `spoolsv.exe` process (PID = 856) has been compromised, leading to the creation of child processes `rundll32.exe` and `cmd.exe`. The `notepad.exe` and `calc.exe` processes were then executed from `cmd.exe`. We can observe what they did through memory sections.
+  
+
 ![image](https://github.com/user-attachments/assets/949ad7d1-85b2-4e1d-9ddc-1d8db41c0077)
 
-    *   It's normal for a print process like `spoolsv.exe` to access `locale.nls`, but since we know `spoolsv.exe` is compromised, we should also observe it.
+    
+   *   It's normal for a print process like `spoolsv.exe` to access `locale.nls`, but since we know `spoolsv.exe` is compromised, we should also observe it.
+
+
 ![image](https://github.com/user-attachments/assets/dc9ad625-4155-4548-88d3-0a934a212b28)
 
-    *   `user32.dll`, `kernel32.dll`, `ntdll.dll`: These are extremely important DLLs in Windows, providing basic functions for the user interface, system management, and low-level operations.  Almost every program uses them.
+   *   `user32.dll`, `kernel32.dll`, `ntdll.dll`: These are extremely important DLLs in Windows, providing basic functions for the user interface, system management, and low-level operations.  Almost every program uses them.
 
 
 
@@ -422,21 +442,33 @@ Handles are pointers to system objects such as files, registry keys, processes, 
 
     *   Command Example:  `volatility_2.6_win64_standalone.exe -f "E:\\Dieu_tra_so\\Lab4-Resource\\Windows_RAM.mem" --profile=Win2008R2SP0x64 memdump -p 1896 -D "E:\\Dieu_tra_so\\Lab4-Resource\\task2"`
     *   This command dumps the entire process with PID 1896 to the destination directory.
+  
+   
+
 ![image](https://github.com/user-attachments/assets/2889a1a2-a34c-4cb9-86cb-f45fbf4813b9)
+
 ![image](https://github.com/user-attachments/assets/bef104e5-074c-4e5e-adee-2c5bd41e1a31)
 
 2.  **cmdline:**
 
     *   Displays the command line used to start each process.
+  
+
+
 ![image](https://github.com/user-attachments/assets/e83df515-8c82-4358-a3e7-7005c6f2b656)
 
 3.  **filescan:**
 
     *   Scans memory to find files, including deleted files that still have data in memory.
+  
+
 ![image](https://github.com/user-attachments/assets/eb91fb12-f72d-4010-8025-dae7ba79d94f)
 
 4. **driverscan**
     * Scans memory to look for loaded drivers, including hidden or rootkit-concealed drivers.
+
+  
+
 ![image](https://github.com/user-attachments/assets/9b1a0cc2-f239-4ac0-b17a-69c337adb4b8)
 
 # Using the `strings` Command to Further Analyze `Windows_RAM.mem` :
@@ -446,27 +478,37 @@ Handles are pointers to system objects such as files, registry keys, processes, 
     *   To extract domain names with `.com`, `.net`, and `.org` extensions, use this command:
         `strings Windows_RAM.mem | grep -E '\\.(com|net|org)' | sort | uniq`
     *   The result of this command is a list of domain names found in memory, including both valid and invalid domain names.
+  
+
 ![image](https://github.com/user-attachments/assets/4ddf48d8-64ac-4d38-953d-b91bebee70c6)
+
+
 ![image](https://github.com/user-attachments/assets/a9dfc65c-5d92-44b5-8c34-989afe0dce51)
+
 ![image](https://github.com/user-attachments/assets/92648d62-df08-4edc-9090-55eca2ad1391)
 
-2.  **Extract Email Addresses:**
+3.  **Extract Email Addresses:**
 
     *   To extract email addresses, use this command:
         `strings Windows_RAM.mem | grep -E '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}' | sort | uniq`
 ![image](https://github.com/user-attachments/assets/a1cbd257-11b1-448f-a20f-c08194585ebd)
 
-3.  **List Commands Likely Run on the System via cmd and PowerShell:**
+4.  **List Commands Likely Run on the System via cmd and PowerShell:**
 
     *   **For `cmd`:**
         `strings Windows_RAM.mem | grep -i "cmd.exe " | sort | uniq`
         This command searches for strings containing `cmd.exe`.
     * Using volatility to check the command line of cmd.
+
+  
+  
 ![image](https://github.com/user-attachments/assets/c83c7856-e34e-4d4d-9927-271cb340c635)
 
-    *   **For PowerShell:**
+   *   **For PowerShell:**
         `strings Windows_RAM.mem | grep -i "powershell.exe" | sort | uniq`
         This command searches for strings containing `powershell.exe`.
+
+
 ![image](https://github.com/user-attachments/assets/7bc44feb-1904-461b-b162-679f0044ae24)
 
 </details>
