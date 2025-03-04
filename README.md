@@ -1,6 +1,10 @@
 <details>
+   
+<h1>This repository, no coding. ᓚᘏᗢ </h1>
 
-<summary><h1>This repository, no coding. As a student learning about cyber security, i just want to show what i did and how digital forensics work (doing realistic simulation lab ). If care about it so expan it down ᓚᘏᗢ </h1></summary>
+As a student learning about cyber security, i just want to show what i did and how digital forensics work (doing realistic simulation lab ). If care about it so expan it down
+<summary>LAB Digital Forensics</summary>
+
 
 # Digital_Forensics
 
