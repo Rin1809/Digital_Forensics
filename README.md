@@ -4,7 +4,8 @@
 
 # Digital_Forensics
 
-![image](https://github.com/user-attachments/assets/da81535d-c9e2-4d72-a2eb-6c07bf2e6f52)
+![image](https://github.com/user-attachments/assets/a2c73f67-ea73-459e-9fbc-89b020cd9cd3)
+(Splunk Network Monitoring Dashboard )
 
 This repository documents a series of digital forensics exercises performed in a simulated lab environment.  Each task demonstrates a key aspect of a digital forensics investigation, from image acquisition to memory analysis.  The goal is to provide a practical, hands-on understanding of the tools and techniques used in real-world digital forensics investigations.
 
